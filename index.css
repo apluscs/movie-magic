@@ -1,0 +1,21 @@
+.signIn {
+  text-align: right;
+  background-color: black;
+  color: White;
+  height: 50px;
+  width: auto;
+}
+
+#header {
+  text-align: center;
+}
+
+body{
+  background-color: white;
+}
+#searchBar{
+  text-align: center;
+  height: 100px;
+  width: 700px;
+  font-size: 100px
+}
