@@ -21,11 +21,20 @@ class MainPage(webapp2.RequestHandler): #inheritance
         welcomeTemplate=jinjaEnv.get_template('welcome.html')   #gets that html File
         self.response.write(welcomeTemplate.render(my_template_dict))
 
-class ResultPage(webapp2.RequestHandler):
+class LoginPage(webapp2.RequestHandler):
+    pass
+
+class MovieResultPage(webapp2.RequestHandler):
+    pass
+
+class ShowsResultPage(webapp2.RequestHandler):
+    pass
 
 app=webapp2.WSGIApplication(
     [
         ('/',MainPage), #tuple
+        ('/login',LoginPage),
+        ('/search',SearchPage),
         ('/movie-result',MovieResultPage),
         ('/shows-result',ShowsResultPage),
     ],
@@ -38,4 +47,3 @@ jinjaEnv=jinja2.Environment(
     extensions=['jinja2.ext.autoescape'],
     autoescape=True
 )
-
