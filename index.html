@@ -2,7 +2,7 @@
   <head>
     <meta charset="utf-8">
     <title>Movie Magic: Find You Next Movie Now</title>
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="CSS/index.css">
   </head>
 
   <body>
@@ -12,7 +12,9 @@
     <h1 id='header'>Movie Magic</h1>
     <h3 id="header">Find Your Next Movie Now</h3>
     <div id='searchBar'>
-    <input id="searchBar" type="text" name="searchBar" value="">
+      <form action="/results" method="post">
+        <input id="searchBar" type="text" name="searchItem" value="">
+      </form>
     </div>
   </body>
 </html>
