@@ -75,7 +75,7 @@ class ResultsPage(webapp2.RequestHandler):
         pass
 
     def post(self):
-        searchTerm = self.request.get("searchItem")
+        searchTerm = self.request.get("searchBar")
         q = searchTerm.replace(" ","+")
         k = "341009-MovieMag-4Y8KEEUH"
         api_url = "https://tastedive.com/api/similar?q=" + q +"&k=" + k
