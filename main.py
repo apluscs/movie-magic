@@ -28,7 +28,7 @@ class MovieResultPage(webapp2.RequestHandler):
     pass
 
 class ShowsResultPage(webapp2.RequestHandler):
-    pass
+    
 
 app=webapp2.WSGIApplication(
     [
