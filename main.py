@@ -70,13 +70,34 @@ class MovieResultPage(webapp2.RequestHandler):
 
 class ShowsResultPage(webapp2.RequestHandler):
     pass
+<<<<<<< HEAD
+=======
+class ResultsPage(webapp2.RequestHandler):
+    def get(self):
+        pass
+
+    def post(self):
+
+        searchTerm = self.request.get("searchItem")
+        q = searchTerm.replace(" ","+")
+        k = "341009-MovieMag-4Y8KEEUH"
+        api_url = "https://tastedive.com/api/similar?q=" + q +"&k=" + k
+        tastedive_response_json = urlfetch.fetch(api_url).content
+        tastedive_response_raw = json.loads(tastedive_response_json)
+        self.response.write(tastedive_response_json)
+
+>>>>>>> 6623593b5f978f87b822db812f3b62e01f605488
 
 app=webapp2.WSGIApplication(
     [
         ('/',MainPage), #tuple
         ('/login',LoginPage),
+<<<<<<< HEAD
+=======
+        ('/results', ResultsPage),
+>>>>>>> 6623593b5f978f87b822db812f3b62e01f605488
         ('/movie-result',MovieResultPage),
-        ('/shows-result',ShowsResultPage),
+        ('/shows-result',ShowsResultPage)
     ],
     debug=True    #parameter 1
 )
