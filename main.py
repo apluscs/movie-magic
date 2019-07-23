@@ -37,7 +37,7 @@ class LoginPage(webapp2.RequestHandler):
         if existing_user:
             self.redirect("/?logout_url="+logout_url)  #send to home
         else:
-            self.redirect("/register?logout_url="+logout_url)   #send to register
+            self.redirect("/register")   #send to register
     def get(self):
         user=users.get_current_user()
         print(user)
