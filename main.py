@@ -70,8 +70,6 @@ class MovieResultPage(webapp2.RequestHandler):
 
 class ShowsResultPage(webapp2.RequestHandler):
     pass
-<<<<<<< HEAD
-=======
 class ResultsPage(webapp2.RequestHandler):
     def get(self):
         pass
@@ -84,7 +82,6 @@ class ResultsPage(webapp2.RequestHandler):
         tastedive_response_json = urlfetch.fetch(api_url).content
 
         tastedive_response_raw = json.loads(tastedive_response_json)
-
         recommendationList = []
         for results in tastedive_response_raw['Similar']['Results']:
             recommendationList.append(results["Name"])
@@ -94,16 +91,12 @@ class ResultsPage(webapp2.RequestHandler):
         resultsTemplate=jinjaEnv.get_template('results.html')   #gets that html File
         self.response.write(resultsTemplate.render(references))
 
->>>>>>> 6623593b5f978f87b822db812f3b62e01f605488
 
 app=webapp2.WSGIApplication(
     [
         ('/',MainPage), #tuple
         ('/login',LoginPage),
-<<<<<<< HEAD
-=======
         ('/results', ResultsPage),
->>>>>>> 6623593b5f978f87b822db812f3b62e01f605488
         ('/movie-result',MovieResultPage),
         ('/shows-result',ShowsResultPage)
     ],
