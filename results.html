@@ -1,12 +1,22 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-  </head>
-  <body>
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="CSS/results.css">
+  <title></title>
+</head>
+
+<body>
+<h1>Your search: {{searchTerm}}</h1>
+<img id="searchedImg" height="250px" width="200px"src="{{url}}"
+<br>
+  <form class="row">
     {% for item in recomendations %}
+    <img height="150px" width="100px" src="{{url}}"></img>
     <h4> {{item}} </h4>
     {% endfor %}
-  </body>
+  </form>
+</body>
+
 </html>
