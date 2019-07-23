@@ -7,9 +7,8 @@
 </head>
 
 <body>
-  <div class="signInButton">
-    <button type="button" name="button">Sign In</button>
-  </div>
+  <a  {{hideLogOut}} href={{logout_url}}>Logout here</a>
+    <a  {{hideLogIn}} href='/login'>Login</a>
   <h1 id='header'>Movie Magic</h1>
   <h3 id="header">Find Your Next Movie Or Show Now</h3>
   <form class='searching' action = "/results" method = 'post'>
