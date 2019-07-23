@@ -12,8 +12,8 @@
 <img id="searchedImg" height="250px" width="200px"src="{{url}}"
 <br>
   <form class="row">
-    {% for item in recomendations %}
-    <img height="150px" width="100px" src="{{url}}"></img>
+    {% for item in movieAndPoster %}
+    <img height="150px" width="100px" src="{{movieAndPoster[item]}}"></img>
     <h4> {{item}} </h4>
     {% endfor %}
   </form>
