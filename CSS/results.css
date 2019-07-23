@@ -1,6 +1,9 @@
-.row{
-
-  height: 100px;
-  /* justify-content: space-around; */
-
+div.item{
+  vertical-align: top;
+  display: inline-block;
+  text-align: center;
+  width: 120px;
+}
+.caption{
+  display: block;
 }
