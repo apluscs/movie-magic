@@ -80,7 +80,6 @@ class ResultsPage(webapp2.RequestHandler):
         k = "341009-MovieMag-4Y8KEEUH"
         api_url = "https://tastedive.com/api/similar?q=" + q +"&k=" + k
         tastedive_response_json = urlfetch.fetch(api_url).content
-
         tastedive_response_raw = json.loads(tastedive_response_json)
         recommendationList = []
         for results in tastedive_response_raw['Similar']['Results']:
