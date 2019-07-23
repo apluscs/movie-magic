@@ -70,10 +70,6 @@ class MovieResultPage(webapp2.RequestHandler):
 
 class ShowsResultPage(webapp2.RequestHandler):
     pass
-
-
-
-
 class ResultsPage(webapp2.RequestHandler):
     def get(self):
         pass
