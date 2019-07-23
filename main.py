@@ -11,7 +11,7 @@ class SiteUser(ndb.Model):
     email=ndb.StringProperty()
 
 class MainPage(webapp2.RequestHandler): #inheritance
-    def get(self):  #get request
+    def get(self):
         user=users.get_current_user()
         print(user)
         logout_url=users.create_logout_url('/')
@@ -53,6 +53,8 @@ class LoginPage(webapp2.RequestHandler):
             login_template=jinjaEnv.get_template('login.html')
             self.response.write(login_template.render(login_dict))
 
+
+
 class RegisterPage(webapp2.RequestHandler):
     def get(self):
         logout_url=users.create_logout_url('/')
@@ -78,34 +80,14 @@ class MovieResultPage(webapp2.RequestHandler):
 
 class ShowsResultPage(webapp2.RequestHandler):
     pass
-class ResultsPage(webapp2.RequestHandler):
-    def get(self):
-        pass
-
-    def post(self):
-        searchTerm = self.request.get("searchBar")
-        q = searchTerm.replace(" ","+")
-        k = "341009-MovieMag-4Y8KEEUH"
-        api_url = "https://tastedive.com/api/similar?q=" + q +"&k=" + k
-        tastedive_response_json = urlfetch.fetch(api_url).content
-        tastedive_response_raw = json.loads(tastedive_response_json)
-        recommendationList = []
-        for results in tastedive_response_raw['Similar']['Results']:
-            recommendationList.append(results["Name"])
-        references = {
-            "recomendations" : recommendationList
-        }
-        resultsTemplate=jinjaEnv.get_template('results.html')   #gets that html File
-        self.response.write(resultsTemplate.render(references))
-
 
 app=webapp2.WSGIApplication(
     [
         ('/',MainPage), #tuple
         ('/login',LoginPage),
-        ('/results', ResultsPage),
         ('/movie-result',MovieResultPage),
-        ('/shows-result',ShowsResultPage)
+        ('/shows-result',ShowsResultPage),
+        ('/register',RegisterPage),
     ],
     debug=True    #parameter 1
 )
