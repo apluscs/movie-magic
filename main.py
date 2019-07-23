@@ -72,7 +72,7 @@ class RegisterPage(webapp2.RequestHandler):
         afterRegister_dict={        }
         afterRegister_template=jinjaEnv.get_template('afterRegister.html')
         self.response.write(afterRegister_template.render(afterRegister_dict))
-        
+
 class MovieResultPage(webapp2.RequestHandler):
     pass
 
