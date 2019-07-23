@@ -81,18 +81,35 @@ class MovieResultPage(webapp2.RequestHandler):
 class ShowsResultPage(webapp2.RequestHandler):
     pass
 
+class ResultsPage(webapp2.RequestHandler):
+    def get(self):
+        pass
+    def post(self):
+        searchTerm = self.request.get("searchBar")
+        q = searchTerm.replace(" ","+")
+        k = "341009-MovieMag-4Y8KEEUH"
+        api_url = "https://tastedive.com/api/similar?q=" + q +"&k=" + k
+        tastedive_response_json = urlfetch.fetch(api_url).content
+        tastedive_response_raw = json.loads(tastedive_response_json)
+        recommendationList = []
+        for results in tastedive_response_raw['Similar']['Results']:
+            recommendationList.append(results["Name"])
+        references = {
+            "recomendations" : recommendationList
+        }
+        resultsTemplate=jinjaEnv.get_template('results.html')   #gets that html File
+        self.response.write(resultsTemplate.render(references))
 app=webapp2.WSGIApplication(
     [
         ('/',MainPage), #tuple
         ('/login',LoginPage),
+        ('/results', ResultsPage),
         ('/movie-result',MovieResultPage),
-        ('/shows-result',ShowsResultPage),
-        ('/register',RegisterPage),
+        ('/shows-result',ShowsResultPage)
     ],
     debug=True    #parameter 1
 )
 # curl -d 'template_id=112126428&username=danielkelleycssi&password=cssirocks&text0=thisisthetop&text1=thisisthebottom' https://api.imgflip.com/caption_image
-
 jinjaEnv=jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),  #gives loader = "/Users/cssi/Desktop/cssi-labs/pthon/labs/app-engine"
     extensions=['jinja2.ext.autoescape'],
