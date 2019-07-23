@@ -1,28 +1,69 @@
 import webapp2
 import jinja2
 import os
-from google.appengine.api import urlfetch
+from google.appengine.api import urlfetch, users
+from google.appengine.ext import ndb
 import json
+
+class SiteUser(ndb.Model):
+    first_name=ndb.StringProperty()
+    age=ndb.IntegerProperty()
+    email=ndb.StringProperty()
 
 class MainPage(webapp2.RequestHandler): #inheritance
     def get(self):  #get request
         # self.response.headers['Content-Type']='text/html; charset=utf-8'
         # self.response.write("welcome.html")
-        api_url="https://api.imgflip.com/get_memes"
-        imgflip_response=urlfetch.fetch(api_url).content
-        imgflip_response_json=json.loads(imgflip_response)  #return dictionary of json type code
-        print(imgflip_response_json["data"]["memes"])
-        meme_templates=[]
-        for meme in imgflip_response_json["data"]["memes"][0:10]:
-            meme_templates.append(meme["url"])
-        my_template_dict={
-            "imgs": meme_templates
-        }
-        welcomeTemplate=jinjaEnv.get_template('welcome.html')   #gets that html File
-        self.response.write(welcomeTemplate.render(my_template_dict))
+        # api_url="https://api.imgflip.com/get_memes"
+        # imgflip_response=urlfetch.fetch(api_url).content
+        # imgflip_response_json=json.loads(imgflip_response)  #return dictionary of json type code
+        # meme_templates=[]
+        # for meme in imgflip_response_json["data"]["memes"][0:10]:
+        #     meme_templates.append(meme["url"])
+        # my_template_dict={
+        #     "imgs": meme_templates
+        # }
+        indexTemplate=jinjaEnv.get_template('index.html')   #gets that html File
+        self.response.write(indexTemplate.render())
 
 class LoginPage(webapp2.RequestHandler):
-    pass
+
+    def get(self):
+        user=users.get_current_user()
+        if user:
+            email_address=user.nickname()   #username
+            logout_url=users.create_logout_url('/') #redirect to this link
+            logout_button='<a href="%s"> Log out </a>'   % logout_url     #replaces %s with login_url
+            existing_user=SiteUser.query().filter(SiteUser.email== email_address).get() #get only pulls 1 record
+            if existing_user:
+                self.response.write("Welcome to home page "+existing_user.first_name+ logout_button)
+            else:
+                self.response.write('''Please rgister!
+                <form method='post' action='/login'>
+                    <input type='text' name='first_name' value="first name">
+                    <input type='text' name='age' value="age">
+                    <input type='submit'>
+                </form>
+                <br>
+                %s
+                ''' % logout_button)
+        else:
+            login_url=users.create_login_url('/')
+            login_button='<a href="%s"> Sign in </a>'   % login_url     #replaces %s with login_url
+            self.response.write("Please log in<br>"+ login_button)
+
+    def post(self):
+        print("am posting")
+        user=users.get_current_user()
+        if user:
+            site_user=SiteUser(
+                first_name=self.request.get('first_name'),
+                age=int(self.request.get('age')),
+                email=user.nickname()
+            )
+            site_user.put()
+            self.response.write("Thank you for registering")
+
 
 class MovieResultPage(webapp2.RequestHandler):
     pass
@@ -34,7 +75,6 @@ app=webapp2.WSGIApplication(
     [
         ('/',MainPage), #tuple
         ('/login',LoginPage),
-        ('/search',SearchPage),
         ('/movie-result',MovieResultPage),
         ('/shows-result',ShowsResultPage),
     ],
