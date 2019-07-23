@@ -75,14 +75,22 @@ class ResultsPage(webapp2.RequestHandler):
         pass
 
     def post(self):
-
         searchTerm = self.request.get("searchItem")
         q = searchTerm.replace(" ","+")
         k = "341009-MovieMag-4Y8KEEUH"
         api_url = "https://tastedive.com/api/similar?q=" + q +"&k=" + k
         tastedive_response_json = urlfetch.fetch(api_url).content
+
         tastedive_response_raw = json.loads(tastedive_response_json)
-        self.response.write(tastedive_response_json)
+
+        recommendationList = []
+        for results in tastedive_response_raw['Similar']['Results']:
+            recommendationList.append(results["Name"])
+        references = {
+            "recomendations" : recommendationList
+        }
+        resultsTemplate=jinjaEnv.get_template('results.html')   #gets that html File
+        self.response.write(resultsTemplate.render(references))
 
 
 app=webapp2.WSGIApplication(
