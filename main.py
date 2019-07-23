@@ -11,7 +11,7 @@ class SiteUser(ndb.Model):
     email=ndb.StringProperty()
 
 class MainPage(webapp2.RequestHandler): #inheritance
-    def get(self):  #get request
+    def get(self):
         user=users.get_current_user()
         print(user)
         logout_url=users.create_logout_url('/')
@@ -53,6 +53,8 @@ class LoginPage(webapp2.RequestHandler):
             login_template=jinjaEnv.get_template('login.html')
             self.response.write(login_template.render(login_dict))
 
+
+
 class RegisterPage(webapp2.RequestHandler):
     def get(self):
         logout_url=users.create_logout_url('/')
@@ -78,10 +80,10 @@ class MovieResultPage(webapp2.RequestHandler):
 
 class ShowsResultPage(webapp2.RequestHandler):
     pass
+
 class ResultsPage(webapp2.RequestHandler):
     def get(self):
         pass
-
     def post(self):
         searchTerm = self.request.get("searchBar")
         q = searchTerm.replace(" ","+")
@@ -97,8 +99,6 @@ class ResultsPage(webapp2.RequestHandler):
         }
         resultsTemplate=jinjaEnv.get_template('results.html')   #gets that html File
         self.response.write(resultsTemplate.render(references))
-
-
 app=webapp2.WSGIApplication(
     [
         ('/',MainPage), #tuple
@@ -110,7 +110,6 @@ app=webapp2.WSGIApplication(
     debug=True    #parameter 1
 )
 # curl -d 'template_id=112126428&username=danielkelleycssi&password=cssirocks&text0=thisisthetop&text1=thisisthebottom' https://api.imgflip.com/caption_image
-
 jinjaEnv=jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),  #gives loader = "/Users/cssi/Desktop/cssi-labs/pthon/labs/app-engine"
     extensions=['jinja2.ext.autoescape'],
