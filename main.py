@@ -12,59 +12,67 @@ class SiteUser(ndb.Model):
 
 class MainPage(webapp2.RequestHandler): #inheritance
     def get(self):  #get request
-        # self.response.headers['Content-Type']='text/html; charset=utf-8'
-        # self.response.write("welcome.html")
-        # api_url="https://api.imgflip.com/get_memes"
-        # imgflip_response=urlfetch.fetch(api_url).content
-        # imgflip_response_json=json.loads(imgflip_response)  #return dictionary of json type code
-        # meme_templates=[]
-        # for meme in imgflip_response_json["data"]["memes"][0:10]:
-        #     meme_templates.append(meme["url"])
-        # my_template_dict={
-        #     "imgs": meme_templates
-        # }
-        indexTemplate=jinjaEnv.get_template('index.html')   #gets that html File
-        self.response.write(indexTemplate.render())
+        user=users.get_current_user()
+        print(user)
+        logout_url=users.create_logout_url('/')
+        index_template=jinjaEnv.get_template('index.html')
+        index_dict={}
+        if user:    #someone logged into Google = only show logout feature
+            index_dict={
+                "logout_url": logout_url,    #need to hide
+                "hideLogIn": "hidden=\"\" "
+            }
+        else:   #not logged into Google = only show login feature
+            index_dict={
+                "hideLogOut": "hidden=\"\" "
+            }
+        print(index_dict)
+        self.response.write(index_template.render(index_dict))
 
 class LoginPage(webapp2.RequestHandler):
-
+    def checkExistingUser(self,logout_url):
+        user=users.get_current_user()
+        email_address=user.nickname()   #username
+        existing_user=SiteUser.query().filter(SiteUser.email== email_address).get() #get only pulls 1 record
+        if existing_user:
+            self.redirect("/?logout_url="+logout_url)  #send to home
+        else:
+            self.redirect("/register?logout_url="+logout_url)   #send to register
     def get(self):
         user=users.get_current_user()
-        if user:
-            email_address=user.nickname()   #username
-            logout_url=users.create_logout_url('/') #redirect to this link
-            logout_button='<a href="%s"> Log out </a>'   % logout_url     #replaces %s with login_url
-            existing_user=SiteUser.query().filter(SiteUser.email== email_address).get() #get only pulls 1 record
-            if existing_user:
-                self.response.write("Welcome to home page "+existing_user.first_name+ logout_button)
-            else:
-                self.response.write('''Please rgister!
-                <form method='post' action='/login'>
-                    <input type='text' name='first_name' value="first name">
-                    <input type='text' name='age' value="age">
-                    <input type='submit'>
-                </form>
-                <br>
-                %s
-                ''' % logout_button)
-        else:
-            login_url=users.create_login_url('/')
-            login_button='<a href="%s"> Sign in </a>'   % login_url     #replaces %s with login_url
-            self.response.write("Please log in<br>"+ login_button)
+        print(user)
+        logout_url=users.create_logout_url('/') #redirect to this link
+        if user:    #someone is already logged in to gmail
+            self.checkExistingUser(logout_url)
+        else:   #not a google user
+            login_url=users.create_login_url('/login')
+            print(login_url)
+            login_dict={
+                "login_url": login_url
+            }
+            login_template=jinjaEnv.get_template('login.html')
+            self.response.write(login_template.render(login_dict))
 
+class RegisterPage(webapp2.RequestHandler):
+    def get(self):
+        logout_url=users.create_logout_url('/')
+        registerTemplate=jinjaEnv.get_template('register.html')
+        register_dict={ #need to accept logout_url
+            "logout_url": logout_url
+        }
+        self.response.write(registerTemplate.render(register_dict))
     def post(self):
-        print("am posting")
         user=users.get_current_user()
-        if user:
-            site_user=SiteUser(
-                first_name=self.request.get('first_name'),
-                age=int(self.request.get('age')),
-                email=user.nickname()
-            )
-            site_user.put()
-            self.response.write("Thank you for registering")
-
-
+        site_user=SiteUser(
+            first_name=self.request.get('first_name'),
+            age=int(self.request.get('age')),
+            email=user.nickname()
+        )
+        site_user.put()
+        afterRegister_dict={        }
+        afterRegister_template=jinjaEnv.get_template('afterRegister.html')
+        self.response.write(afterRegister_template.render(afterRegister_dict))
+        
 class MovieResultPage(webapp2.RequestHandler):
     pass
 
