@@ -12,17 +12,6 @@ class SiteUser(ndb.Model):
 
 class MainPage(webapp2.RequestHandler): #inheritance
     def get(self):  #get request
-        # self.response.headers['Content-Type']='text/html; charset=utf-8'
-        # self.response.write("welcome.html")
-        # api_url="https://api.imgflip.com/get_memes"
-        # imgflip_response=urlfetch.fetch(api_url).content
-        # imgflip_response_json=json.loads(imgflip_response)  #return dictionary of json type code
-        # meme_templates=[]
-        # for meme in imgflip_response_json["data"]["memes"][0:10]:
-        #     meme_templates.append(meme["url"])
-        # my_template_dict={
-        #     "imgs": meme_templates
-        # }
         indexTemplate=jinjaEnv.get_template('index.html')   #gets that html File
         self.response.write(indexTemplate.render())
 
@@ -76,7 +65,7 @@ class ResultsPage(webapp2.RequestHandler):
         pass
 
     def post(self):
-        searchTerm = self.request.get("searchItem")
+        searchTerm = self.request.get("searchBar")
         q = searchTerm.replace(" ","+")
         k = "341009-MovieMag-4Y8KEEUH"
         api_url = "https://tastedive.com/api/similar?q=" + q +"&k=" + k

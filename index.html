@@ -3,18 +3,18 @@
 <head>
   <meta charset="utf-8">
   <title>Movie Magic: Find You Next Movie Now</title>
-  <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="CSS/index.css">
 </head>
 
 <body>
-  <div class="signInButton">
+  <form class="signInButton" action="/login">
     <button type="button" name="button">Sign In</button>
-  </div>
+  </form>
   <h1 id='header'>Movie Magic</h1>
   <h3 id="header">Find Your Next Movie Or Show Now</h3>
-  <div class='searching'>
+  <form class='searching' action="/results" method="post">
     <input id="searchBar" type="text" name="searchBar" placeholder="What Movies do you enjoy?">
-    <button id= "searchButton" type="submit" name='search'>search</button>
-  </div>
+    <button id= "searchButton" type="submit" name='search' action='/results'>search</button>
+  </form>
 </body>
 </html>
