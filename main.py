@@ -173,8 +173,8 @@ app=webapp2.WSGIApplication(
         ('/login',LoginPage),
         ('/results', ResultsPage),
         ('/register',RegisterPage),
-        ('/movie-result',MovieResultPage),
-        ('/shows-result',ShowsResultPage)
+        ('/movie-results',MovieResultPage),
+        ('/shows-results',ShowsResultPage)
     ],
     debug=True    #parameter 1
 )
