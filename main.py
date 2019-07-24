@@ -129,7 +129,7 @@ class ResultsPage(webapp2.RequestHandler):
         # print(recommendationList)
         #From the resulting JSON file that tastedive returned, this function extracts all the names
         #of the movie recommendations
-        for results in tastedive_response_raw['Similar']['Results'][0:50]:
+        for results in tastedive_response_raw['Similar']['Results'][0:10]:
             recommendationList.append(results["Name"])
         titleAndPic = {}
         urls = []
