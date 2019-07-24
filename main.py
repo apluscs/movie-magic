@@ -14,10 +14,7 @@ class SiteUser(ndb.Model):
 class MainPage(webapp2.RequestHandler): #inheritance
     def get(self):
         user=users.get_current_user()
-<<<<<<< HEAD
-=======
-        # print(user)
->>>>>>> 85f010f20cfdadd22e43b1e3a72dc4b6c2f1219e
+
         logout_url=users.create_logout_url('/')
         index_template=jinjaEnv.get_template('index.html')
         index_dict={}
@@ -30,10 +27,7 @@ class MainPage(webapp2.RequestHandler): #inheritance
             index_dict={
                 "hideLogOut": "hidden=\"\" "
             }
-<<<<<<< HEAD
-=======
-        # print(index_dict)
->>>>>>> 85f010f20cfdadd22e43b1e3a72dc4b6c2f1219e
+
         self.response.write(index_template.render(index_dict))
 
 class LoginPage(webapp2.RequestHandler):
@@ -47,19 +41,12 @@ class LoginPage(webapp2.RequestHandler):
             self.redirect("/register")   #send to register
     def get(self):
         user=users.get_current_user()
-<<<<<<< HEAD
-=======
-        # print(user)
->>>>>>> 85f010f20cfdadd22e43b1e3a72dc4b6c2f1219e
         logout_url=users.create_logout_url('/') #redirect to this link
         if user:    #someone is already logged in to gmail
             self.checkExistingUser(logout_url)
         else:   #not a google user
             login_url=users.create_login_url('/login')
-<<<<<<< HEAD
-=======
-            # print(login_url)
->>>>>>> 85f010f20cfdadd22e43b1e3a72dc4b6c2f1219e
+
             login_dict={
                 "login_url": login_url
             }
