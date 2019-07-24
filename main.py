@@ -102,7 +102,8 @@ class ShowsResultPage(webapp2.RequestHandler):  #add a theatre radius parameter
 class MovieResultPage(webapp2.RequestHandler):
     def get(self):
         user=users.get_current_user()
-        movie_title="The "#self.request.get('movie_title')
+        movie_title=self.request.get('movie_title')
+        print(movie_title)
         if not user:
             self.redirect("/login")  #send to login to Google
             return
@@ -167,6 +168,7 @@ class ResultsPage(webapp2.RequestHandler):
         }
         resultsTemplate=jinjaEnv.get_template('results.html')   #gets that html File
         self.response.write(resultsTemplate.render(references))
+
 app=webapp2.WSGIApplication(
     [
         ('/',MainPage), #tuple
