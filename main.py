@@ -119,16 +119,6 @@ class ResultsPage(webapp2.RequestHandler):
                     urls.append(link)
                     titleAndPic[item] = link
         print (titleAndPic)
-            # url = OMDB_response_raw["Poster"]
-            # print("****************************")
-            # for key in OMDB_response_raw:
-            #     print("key is " + str(key))
-            #     print("key type is" + str(type(key)))
-            #     print("value is " + str(OMDB_response_raw[key]))
-
-            # print("type is " + OMDB_response_raw)
-            # print(OMDB_response_raw.keys())
-            # titleAndPic[item] = url
         references = {
             "recomendations" : recommendationList,
             "link" : urls,
