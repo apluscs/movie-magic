@@ -3,14 +3,36 @@
 <head>
   <meta charset="utf-8">
   <title>Movie Magic: Find You Next Movie Now</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="CSS/index.css">
 </head>
 
 <body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+          <a {{hideLogIn}} class="btn btn-light" href='/login' role="button">Login</a>
+        </li>
+        <li>
+          <a {{hideLogOut}} class="btn btn-secondary" href={{logout_url}} role="button">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
   <form class="signInButton">
-  <a  {{hideLogIn}} href='/login'>Login</a>
-  <a  {{hideLogOut}} href={{logout_url}}>Logout here</a>
-</form>
+
+  </form>
   <h1 id='header'>Movie Magic</h1>
   <h3 id="header">Find Your Next Movie Or Show Now</h3>
   <form class='searching' action = "/results" method = 'post' autocomplete="off">
