@@ -2,9 +2,25 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title></title>
+    <title>All About {{selected_movie}}</title>
   </head>
   <body>
-    <h1> </h1>
+    <div>
+        {% if not movieInfos: %}
+        <h1>There are no showtimes for this movie</h1>
+        {% endif %}
+        {% for movie in movieInfos %}
+        <div class="movie-info">
+          <h4> Nearby Showtimes for {{movie.title}} </h4>
+          <p> {% for showtime in movie.showtimes %}
+              Theatre: {{showtime.theatre.name}} <br>
+              Date: {{showtime.dateTime}} <br>
+              Buy tickets <a href={{showtime.ticketURI}}>here</a> <br><br>
+            {% endfor %}
+          </p>
+          <br>
+        </div>
+        {% endfor %}
+    </div>
   </body>
 </html>
