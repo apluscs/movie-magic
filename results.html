@@ -12,7 +12,7 @@
       {% for item in movieAndPoster %}
       <div class="resultsDisplay">
         <h4> {{item}} </h4>
-        <img height="300px" width="200px" src="{{movieAndPoster[item]}}"></img>
+        <a href="/movie-results"><img height="300px" width="200px" src="{{movieAndPoster[item]}}"></img></a>
       </div>
       {% endfor %}
   </div>

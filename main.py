@@ -152,12 +152,13 @@ class ResultsPage(webapp2.RequestHandler):
             OMDB_response_raw = json.loads(OMDB_response_json)
             posterKey = unicode("Poster")
             # print(OMDB_response_raw[key])
+            print("*************")
+            print(OMDB_response_raw)
             for key in OMDB_response_raw:
                 if key == posterKey:
                     link = OMDB_response_raw[key]
                     urls.append(link)
                     titleAndPic[item] = link
-        print (titleAndPic)
         references = {
             "recomendations" : recommendationList,
             "link" : urls,
