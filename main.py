@@ -100,7 +100,7 @@ class ShowsResultPage(webapp2.RequestHandler):  #add a theatre radius parameter
         self.response.write(movie_result_template.render(movie_result_dict))
 
 class MovieResultPage(webapp2.RequestHandler):
-    def get(self):
+    def post(self):
         user=users.get_current_user()
         movie_title="The "#self.request.get('movie_title')
         if not user:
@@ -141,7 +141,7 @@ class ResultsPage(webapp2.RequestHandler):
         tastedive_response_json = urlfetch.fetch(api_url).content
         tastedive_response_raw = json.loads(tastedive_response_json)
         recommendationList = []
-        for results in tastedive_response_raw['Similar']['Results'][0:10]:
+        for results in tastedive_response_raw['Similar']['Results'][0:50]:
             recommendationList.append(results["Name"])
         titleAndPic = {}
         urls = []
@@ -173,7 +173,7 @@ app=webapp2.WSGIApplication(
         ('/login',LoginPage),
         ('/results', ResultsPage),
         ('/register',RegisterPage),
-        ('/movie-result',MovieResultPage),
+        ('/movie-results',MovieResultPage),
         ('/shows-result',ShowsResultPage)
     ],
     debug=True    #parameter 1
