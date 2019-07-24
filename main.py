@@ -134,14 +134,12 @@ class ResultsPage(webapp2.RequestHandler):
             OMDB_response_raw = json.loads(OMDB_response_json)
             posterKey = unicode("Poster")
             # print(OMDB_response_raw[key])
-            print("*************")
-            print(OMDB_response_raw)
             for key in OMDB_response_raw:
                 if key == posterKey:
                     link = OMDB_response_raw[key]
                     urls.append(link)
                     titleAndPic[item] = link
-        OMDBurl = "http://www.omdbapi.com/?t=" + searchTerm + "&apikey=" + OMDBkey
+        OMDBurl = "http://www.omdbapi.com/?t=" + q + "&apikey=" + OMDBkey
         OMDB_response_json = urlfetch.fetch(OMDBurl).content
         OMDB_response_raw = json.loads(OMDB_response_json)
         posterKey = unicode("Poster")
