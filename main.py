@@ -176,11 +176,7 @@ app=webapp2.WSGIApplication(
         ('/results', ResultsPage),
         ('/register',RegisterPage),
         ('/movie-results',MovieResultPage),
-<<<<<<< HEAD
-        ('/shows-result',ShowsResultPage)
-=======
         ('/shows-results',ShowsResultPage)
->>>>>>> 20572828e593b41572c222cb79b922d6d1dbf11f
     ],
     debug=True    #parameter 1
 )
