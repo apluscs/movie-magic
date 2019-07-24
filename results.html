@@ -1,12 +1,22 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-  </head>
-  <body>
-    {% for item in recomendations %}
-    <h4> {{item}} </h4>
-    {% endfor %}
-  </body>
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="CSS/results.css">
+  <title></title>
+</head>
+
+<body>
+  <div class="results">
+      {% for item in movieAndPoster %}
+      <div class="resultsDisplay">
+        <h4> {{item}} </h4>
+        <img height="300px" width="200px" src="{{movieAndPoster[item]}}"></img>
+      </div>
+      {% endfor %}
+  </div>
+
+</body>
+
 </html>

@@ -7,11 +7,13 @@
 </head>
 
 <body>
+  <form class="signInButton">
+  <a  {{hideLogIn}} href='/login'>Login</a>
   <a  {{hideLogOut}} href={{logout_url}}>Logout here</a>
-    <a  {{hideLogIn}} href='/login'>Login</a>
+</form>
   <h1 id='header'>Movie Magic</h1>
   <h3 id="header">Find Your Next Movie Or Show Now</h3>
-  <form class='searching' action = "/results" method = 'post'>
+  <form class='searching' action = "/results" method = 'post' autocomplete="off">
     <input id="searchBar" type="text" name="searchBar" placeholder="What Movies do you enjoy?">
     <button id= "searchButton" type="submit" name='search'>search</button>
   </form>

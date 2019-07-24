@@ -95,15 +95,43 @@ class ResultsPage(webapp2.RequestHandler):
     def post(self):
         searchTerm = self.request.get("searchBar")
         q = searchTerm.replace(" ","+")
-        k = "341009-MovieMag-4Y8KEEUH"
-        api_url = "https://tastedive.com/api/similar?q=" + q +"&k=" + k
+        tastedivekey = "341009-MovieMag-4Y8KEEUH"
+        api_url = "https://tastedive.com/api/similar?q=" + q +"&k=" + tastedivekey
         tastedive_response_json = urlfetch.fetch(api_url).content
         tastedive_response_raw = json.loads(tastedive_response_json)
         recommendationList = []
-        for results in tastedive_response_raw['Similar']['Results']:
+        for results in tastedive_response_raw['Similar']['Results'][0:10]:
             recommendationList.append(results["Name"])
+        titleAndPic = {}
+        urls = []
+        for item in recommendationList:
+            searchTitle = item.replace(" ", "+")
+            OMDBkey = "564669e8"
+            OMDBurl = "http://www.omdbapi.com/?t=" + searchTitle + "&apikey=" + OMDBkey
+            OMDB_response_json = urlfetch.fetch(OMDBurl).content
+            OMDB_response_raw = json.loads(OMDB_response_json)
+            posterKey = unicode("Poster")
+            # print(OMDB_response_raw[key])
+            for key in OMDB_response_raw:
+                if key == posterKey:
+                    link = OMDB_response_raw[key]
+                    urls.append(link)
+                    titleAndPic[item] = link
+        print (titleAndPic)
+            # url = OMDB_response_raw["Poster"]
+            # print("****************************")
+            # for key in OMDB_response_raw:
+            #     print("key is " + str(key))
+            #     print("key type is" + str(type(key)))
+            #     print("value is " + str(OMDB_response_raw[key]))
+
+            # print("type is " + OMDB_response_raw)
+            # print(OMDB_response_raw.keys())
+            # titleAndPic[item] = url
         references = {
-            "recomendations" : recommendationList
+            "recomendations" : recommendationList,
+            "link" : urls,
+            "movieAndPoster" : titleAndPic
         }
         resultsTemplate=jinjaEnv.get_template('results.html')   #gets that html File
         self.response.write(resultsTemplate.render(references))
