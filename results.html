@@ -11,10 +11,17 @@
 <h1>Your search: {{searchTerm}}</h1>
 <img id="searchedImg" height="250px" width="200px"src="{{url}}"
 <br>
+<<<<<<< HEAD
   <div class="item">
     {% for item in recomendations %}
     <img height="150px" width="100px" src="{{url}}"></img>
     <h4 class="caption"> {{item}} </h4>
+=======
+  <form class="row">
+    {% for item in movieAndPoster %}
+    <img height="150px" width="100px" src="{{movieAndPoster[item]}}"></img>
+    <h4> {{item}} </h4>
+>>>>>>> 466024688007684fcc8df87a1398e8121d818dc1
     {% endfor %}
   </form>
 </body>

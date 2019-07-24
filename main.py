@@ -121,7 +121,9 @@ class ResultsPage(webapp2.RequestHandler):
             # print(OMDB_response_raw.keys())
             # titleAndPic[item] = url
         references = {
-            "recomendations" : recommendationList
+            "recomendations" : recommendationList,
+            "link" : urls,
+            "movieAndPoster" : titleAndPic
         }
         resultsTemplate=jinjaEnv.get_template('results.html')   #gets that html File
         self.response.write(resultsTemplate.render(references))
