@@ -102,7 +102,7 @@ class ShowsResultPage(webapp2.RequestHandler):  #add a theatre radius parameter
 class MovieResultPage(webapp2.RequestHandler):
     def get(self):
         user=users.get_current_user()
-        movie_title="The Lion King"#self.request.get('movie_title')
+        movie_title="The "#self.request.get('movie_title')
         if not user:
             self.redirect("/login")  #send to login to Google
             return
@@ -117,11 +117,12 @@ class MovieResultPage(webapp2.RequestHandler):
         gracenote_response_json = urlfetch.fetch(api_url).content
         gracenote_response_raw = json.loads(gracenote_response_json)
         showed_movies=[]
-        for movie in gracenote_response_raw:
+        for movie in gracenote_response_raw:    #need to filter to match movie they selected
             if movie["title"] == movie_title:
                 showed_movies.append(movie)
-        movie_result_dict={ #need to filter to match movie they selected
-            "movieInfos": showed_movies
+        movie_result_dict={
+            "movieInfos": showed_movies,
+            "selected_movie": movie_title
         }
         # print(gracenote_response_raw)
         movie_result_template=jinjaEnv.get_template('movie-result.html')

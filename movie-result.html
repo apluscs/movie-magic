@@ -2,10 +2,13 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>All About [Your Movie]</title>
+    <title>All About {{selected_movie}}</title>
   </head>
   <body>
     <div>
+        {% if not movieInfos: %}
+        <h1>There are no showtimes for this movie</h1>
+        {% endif %}
         {% for movie in movieInfos %}
         <div class="movie-info">
           <h4> Nearby Showtimes for {{movie.title}} </h4>
