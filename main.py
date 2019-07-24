@@ -76,28 +76,56 @@ class RegisterPage(webapp2.RequestHandler):
         afterRegister_template=jinjaEnv.get_template('afterRegister.html')
         self.response.write(afterRegister_template.render(afterRegister_dict))
 
-class ShowsResultPage(webapp2.RequestHandler):
-    pass
-
-class MovieResultPage(webapp2.RequestHandler):
+class ShowsResultPage(webapp2.RequestHandler):  #add a theatre radius parameter
     def get(self):
         user=users.get_current_user()
         if not user:
-            print(user)
-            self.redirect("/login")  #send to home for them to login to Google
+            self.redirect("/login")  #send to login to Google
             return
-        print(user)
         email_address=user.nickname()   #username
-        existing_user=SiteUser.query().filter(SiteUser.email== email_address).get() #get only pulls 1 record
+        existing_user=SiteUser.query().filter(SiteUser.email== email_address).get()
         if not existing_user:
-            self.redirect("/")  #send to home for them to register
+            self.redirect("/login")  #send to login to register
             return
         zip_code=48098#existing_user.zip_code, will replace after validation step
         date=datetime.datetime.now().strftime("%Y-%m-%d")
         api_url="http://data.tmsapi.com/v1.1/movies/showings?startDate=%s&zip=%s&api_key=h67cmw3tean6hyyeh58zhf7r" % (date, zip_code)
         gracenote_response_json = urlfetch.fetch(api_url).content
         gracenote_response_raw = json.loads(gracenote_response_json)
-        print(gracenote_response_raw)
+        movie_result_dict={ #need to filter to match movie they selected
+            "movieInfos": gracenote_response_raw
+        }
+        # print(gracenote_response_raw)
+        movie_result_template=jinjaEnv.get_template('movie-result.html')
+        self.response.write(movie_result_template.render(movie_result_dict))
+
+class MovieResultPage(webapp2.RequestHandler):
+    def get(self):
+        user=users.get_current_user()
+        movie_title="The Lion King"#self.request.get('movie_title')
+        if not user:
+            self.redirect("/login")  #send to login to Google
+            return
+        email_address=user.nickname()   #username
+        existing_user=SiteUser.query().filter(SiteUser.email== email_address).get()
+        if not existing_user:
+            self.redirect("/login")  #send to login to register
+            return
+        zip_code=48098#existing_user.zip_code, will replace after validation step
+        date=datetime.datetime.now().strftime("%Y-%m-%d")
+        api_url="http://data.tmsapi.com/v1.1/movies/showings?startDate=%s&zip=%s&api_key=h67cmw3tean6hyyeh58zhf7r" % (date, zip_code)
+        gracenote_response_json = urlfetch.fetch(api_url).content
+        gracenote_response_raw = json.loads(gracenote_response_json)
+        showed_movies=[]
+        for movie in gracenote_response_raw:
+            if movie["title"] == movie_title:
+                showed_movies.append(movie)
+        movie_result_dict={ #need to filter to match movie they selected
+            "movieInfos": showed_movies
+        }
+        # print(gracenote_response_raw)
+        movie_result_template=jinjaEnv.get_template('movie-result.html')
+        self.response.write(movie_result_template.render(movie_result_dict))
 
 
 
