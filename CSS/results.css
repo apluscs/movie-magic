@@ -40,6 +40,10 @@ body{
   margin-right: auto;
 }
 
-form{
+#searchBar{
   text-align: center;
+  height: 100px;
+  width: 500px;
+  font-size: 25px;
+  margin: auto;
 }
