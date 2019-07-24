@@ -8,22 +8,18 @@
 </head>
 
 <body>
-<h1>Your search: {{searchTerm}}</h1>
-<img id="searchedImg" height="250px" width="200px"src="{{url}}"
-<br>
-<<<<<<< HEAD
-  <div class="item">
-    {% for item in recomendations %}
-    <img height="150px" width="100px" src="{{url}}"></img>
-    <h4 class="caption"> {{item}} </h4>
-=======
-  <form class="row">
-    {% for item in movieAndPoster %}
-    <img height="150px" width="100px" src="{{movieAndPoster[item]}}"></img>
-    <h4> {{item}} </h4>
->>>>>>> 466024688007684fcc8df87a1398e8121d818dc1
-    {% endfor %}
-  </form>
+  <div class="searchedItem">
+    <h1 id='srcTxt'>You searched for: </h1>
+    <img height="600px" width='400px' src='{{}}'
+  </div>
+  <div class="results">
+      {% for item in movieAndPoster %}
+      <div class="resultsDisplay">
+        <h4> {{item}} </h4>
+        <img height="300px" width="200px" src="{{movieAndPoster[item]}}"></img>
+      </div>
+      {% endfor %}
+  </div>
 </body>
 
 </html>
