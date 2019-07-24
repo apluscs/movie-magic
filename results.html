@@ -25,7 +25,7 @@
       <form class="resultsDisplay" action="/movie-results" method="post">
         <div class="resultsDisplay">
           <h4> {{item}} </h4>
-          <input type="text" name="movie_title" value="{{item}}">
+          <input type="hidden" name="movie_title" value="{{item}}" >
           <input type="image" name="{{item}}" value="" src = "{{movieAndPoster[item]}}" height="300px" width="200px">
         </div>
       </form>

@@ -2,9 +2,22 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title></title>
+    <title>All About [Your Show]</title>
   </head>
   <body>
-
+    <div>
+        {% for show in showInfos %}
+        <div class="show-info">
+          <!-- <h4> {{show.title}} </h4>
+          <p> {% for genre in movie.genres %}
+            {{genre}} +", "
+          </p>
+          <p> {% for showtime in movie.show %}
+            {{genre}} +", "
+          </p> -->
+          <br>
+        </div>
+        {% endfor %}
+    </div>
   </body>
 </html>

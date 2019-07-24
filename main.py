@@ -88,12 +88,13 @@ class MovieResultPage(webapp2.RequestHandler):
         if not existing_user:
             self.redirect("/login")  #send to login to register
             return
-        zip_code=48127#existing_user.zip_code, will replace after validation step
+        zip_code="48098"#existing_user.zip_code, will replace after validation step
         date=datetime.datetime.now().strftime("%Y-%m-%d")
-        api_url="http://data.tmsapi.com/v1.1/movies/showings?startDate=%s&zip=%s&api_key=h67cmw3tean6hyyeh58zhf7r" % (date, zip_code)
+        api_url="http://data.tmsapi.com/v1.1/movies/showings?startDate=%s&zip=%s&api_key=f5ty9m8fjg5hbwby658ccc75" % (date, zip_code)
         gracenote_response_json = urlfetch.fetch(api_url).content
         gracenote_response_raw = json.loads(gracenote_response_json)
         showed_movies=[]
+        print(gracenote_response_raw)
         for movie in gracenote_response_raw:    #need to filter to match movie they selected
             if movie["title"] == movie_title:
                 showed_movies.append(movie)
@@ -101,7 +102,6 @@ class MovieResultPage(webapp2.RequestHandler):
             "movieInfos": showed_movies,
             "selected_movie": movie_title
         }
-        # print(gracenote_response_raw)
         movie_result_template=jinjaEnv.get_template('movie-result.html')
         self.response.write(movie_result_template.render(movie_result_dict))
 
@@ -118,6 +118,7 @@ class ResultsPage(webapp2.RequestHandler):
         tastedive_response_json = urlfetch.fetch(api_url).content
         tastedive_response_raw = json.loads(tastedive_response_json)
         recommendationList = []
+        print(recommendationList)
         for results in tastedive_response_raw['Similar']['Results'][0:50]:
             recommendationList.append(results["Name"])
         titleAndPic = {}
