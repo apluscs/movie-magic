@@ -8,7 +8,6 @@ import datetime
 
 class SiteUser(ndb.Model):
     first_name=ndb.StringProperty()
-    age=ndb.IntegerProperty()
     email=ndb.StringProperty()
     zip_code=ndb.StringProperty()
 
@@ -67,7 +66,6 @@ class RegisterPage(webapp2.RequestHandler):
         user=users.get_current_user()
         site_user=SiteUser(
             first_name=self.request.get('first_name'),
-            age=int(self.request.get('age')),
             email=user.nickname(),
             zip_code=self.request.get('zip_code')   #need to make sure this is valid
         )
@@ -78,32 +76,14 @@ class RegisterPage(webapp2.RequestHandler):
 
 class ShowsResultPage(webapp2.RequestHandler):  #add a theatre radius parameter
     def get(self):
-        user=users.get_current_user()
-        if not user:
-            self.redirect("/login")  #send to login to Google
-            return
-        email_address=user.nickname()   #username
-        existing_user=SiteUser.query().filter(SiteUser.email== email_address).get()
-        if not existing_user:
-            self.redirect("/login")  #send to login to register
-            return
-        zip_code=48098#existing_user.zip_code, will replace after validation step
-        date=datetime.datetime.now().strftime("%Y-%m-%d")
-        api_url="http://data.tmsapi.com/v1.1/movies/showings?startDate=%s&zip=%s&api_key=h67cmw3tean6hyyeh58zhf7r" % (date, zip_code)
-        gracenote_response_json = urlfetch.fetch(api_url).content
-        gracenote_response_raw = json.loads(gracenote_response_json)
-        movie_result_dict={ #need to filter to match movie they selected
-            "movieInfos": gracenote_response_raw
-        }
-        # print(gracenote_response_raw)
-        movie_result_template=jinjaEnv.get_template('movie-result.html')
-        self.response.write(movie_result_template.render(movie_result_dict))
+        pass
 
 class MovieResultPage(webapp2.RequestHandler):
     def get(self):
         user=users.get_current_user()
         movie_title=self.request.get('movie_title')
-        print(movie_title)
+        zip_code=""
+        # print(movie_title)
         if not user:
             self.redirect("/login")  #send to login to Google
             return
@@ -112,7 +92,7 @@ class MovieResultPage(webapp2.RequestHandler):
         if not existing_user:
             self.redirect("/login")  #send to login to register
             return
-        zip_code=48098#existing_user.zip_code, will replace after validation step
+        zip_code=48127#existing_user.zip_code, will replace after validation step
         date=datetime.datetime.now().strftime("%Y-%m-%d")
         api_url="http://data.tmsapi.com/v1.1/movies/showings?startDate=%s&zip=%s&api_key=h67cmw3tean6hyyeh58zhf7r" % (date, zip_code)
         gracenote_response_json = urlfetch.fetch(api_url).content
