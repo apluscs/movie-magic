@@ -10,7 +10,7 @@ class SiteUser(ndb.Model):
     first_name=ndb.StringProperty()
     age=ndb.IntegerProperty()
     email=ndb.StringProperty()
-    postal_code
+    zip_code=ndb.StringProperty()
 
 class MainPage(webapp2.RequestHandler): #inheritance
     def get(self):
@@ -68,7 +68,8 @@ class RegisterPage(webapp2.RequestHandler):
         site_user=SiteUser(
             first_name=self.request.get('first_name'),
             age=int(self.request.get('age')),
-            email=user.nickname()
+            email=user.nickname(),
+            zip_code=self.request.get('zip_code')   #need to make sure this is valid
         )
         site_user.put()
         afterRegister_dict={        }
@@ -140,6 +141,7 @@ app=webapp2.WSGIApplication(
         ('/',MainPage), #tuple
         ('/login',LoginPage),
         ('/results', ResultsPage),
+        ('/register',RegisterPage),
         ('/movie-result',MovieResultPage),
         ('/shows-result',ShowsResultPage)
     ],
