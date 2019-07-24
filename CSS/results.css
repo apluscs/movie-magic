@@ -31,3 +31,7 @@ body{
   width: auto;
   text-align: right;
 }
+
+form{
+  text-align: center;
+}
