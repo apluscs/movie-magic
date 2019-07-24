@@ -9,12 +9,24 @@
 
 <body>
   <div class="results">
-      {% for item in movieAndPoster %}
+      <!-- This is the old method for images linking to a new page -->
+      <!-- {% for item in movieAndPoster %}
       <div class="resultsDisplay">
         <h4> {{item}} </h4>
         <a href="/movie-results"><img height="300px" width="200px" src="{{movieAndPoster[item]}}"></img></a>
       </div>
+      {% endfor %} -->
+      <!-- This makes each image a form and submits the title as a part of the form -->
+      {% for item in movieAndPoster %}
+      <form class="resultsDisplay" action="/movie-results" method="post">
+        <div class="resultsDisplay">
+          <h4> {{item}} </h4>
+          <input type="text" name="movie_title" value="{{item}}">
+          <input type="image" name="{{item}}" value="" src = "{{movieAndPoster[item]}}" height="300px" width="200px">
+        </div>
+      </form>
       {% endfor %}
+
   </div>
 
 </body>
