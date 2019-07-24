@@ -4,11 +4,13 @@ import os
 from google.appengine.api import urlfetch, users
 from google.appengine.ext import ndb
 import json
+import datetime
 
 class SiteUser(ndb.Model):
     first_name=ndb.StringProperty()
     age=ndb.IntegerProperty()
     email=ndb.StringProperty()
+    postal_code
 
 class MainPage(webapp2.RequestHandler): #inheritance
     def get(self):
@@ -53,8 +55,6 @@ class LoginPage(webapp2.RequestHandler):
             login_template=jinjaEnv.get_template('login.html')
             self.response.write(login_template.render(login_dict))
 
-
-
 class RegisterPage(webapp2.RequestHandler):
     def get(self):
         logout_url=users.create_logout_url('/')
@@ -75,11 +75,19 @@ class RegisterPage(webapp2.RequestHandler):
         afterRegister_template=jinjaEnv.get_template('afterRegister.html')
         self.response.write(afterRegister_template.render(afterRegister_dict))
 
-class MovieResultPage(webapp2.RequestHandler):
-    pass
-
 class ShowsResultPage(webapp2.RequestHandler):
     pass
+
+class MovieResultPage(webapp2.RequestHandler):
+    def get(self):
+        postalCode="00000"
+        date=datetime.datetime.now().strftime("%Y-%m-%d")
+        api_url="http://data.tmsapi.com/v1.1/movies/showings?startDate=%s&zip=%s&api_key=h67cmw3tean6hyyeh58zhf7r" % date % postalCode
+
+        # gracenote_response_json = urlfetch.fetch(api_url).content
+        # gracenote_response_raw = json.loads(gracenote_response_json)
+
+
 
 class ResultsPage(webapp2.RequestHandler):
     def get(self):
