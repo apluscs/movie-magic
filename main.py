@@ -79,7 +79,7 @@ class ShowsResultPage(webapp2.RequestHandler):  #add a theatre radius parameter
         pass
 
 class MovieResultPage(webapp2.RequestHandler):
-    def get(self):
+    def post(self):
         user=users.get_current_user()
         movie_title=self.request.get('movie_title')
         zip_code=""
@@ -122,7 +122,7 @@ class ResultsPage(webapp2.RequestHandler):
         tastedive_response_json = urlfetch.fetch(api_url).content
         tastedive_response_raw = json.loads(tastedive_response_json)
         recommendationList = []
-        for results in tastedive_response_raw['Similar']['Results'][0:10]:
+        for results in tastedive_response_raw['Similar']['Results'][0:50]:
             recommendationList.append(results["Name"])
         titleAndPic = {}
         urls = []
