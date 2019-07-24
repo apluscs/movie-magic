@@ -9,8 +9,8 @@
 
 <body>
   <div class="searchedItem">
-    <h1 id='srcTxt'>You searched for: </h1>
-    <img height="600px" width='400px' src='{{}}'
+    <h1 id='srcTxt'>You searched for: {{searched}} </h1>
+    <img height="600px" width='400px' src='{{searchImg}}'/>
   </div>
   <div class="results">
       {% for item in movieAndPoster %}
