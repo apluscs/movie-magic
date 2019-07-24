@@ -100,7 +100,7 @@ class MovieResultPage(webapp2.RequestHandler):
         gracenote_response_json = urlfetch.fetch(api_url).content
         gracenote_response_raw = json.loads(gracenote_response_json)
         showed_movies=[]
-        print(gracenote_response_raw)
+        # print(gracenote_response_raw)
         for movie in gracenote_response_raw:    #need to filter to match movie they selected
             if movie["title"] == movie_title:
                 showed_movies.append(movie)
@@ -119,36 +119,45 @@ class ResultsPage(webapp2.RequestHandler):
     def get(self):
         pass
     def post(self):
+        #Receives the search from the form on index.html
         searchTerm = self.request.get("searchBar")
+        #Makes the searchTerm into a url compatable string
         q = searchTerm.replace(" ","+")
+        #Make the tastedivekey and use the URL to retrieve data from the tastedive API
         tastedivekey = "341009-MovieMag-4Y8KEEUH"
         api_url = "https://tastedive.com/api/similar?q=" + q +"&k=" + tastedivekey
         tastedive_response_json = urlfetch.fetch(api_url).content
         tastedive_response_raw = json.loads(tastedive_response_json)
+
         recommendationList = []
         # print(recommendationList)
         for results in tastedive_response_raw['Similar']['Results'][0:50]:
             recommendationList.append(results["Name"])
         titleAndPic = {}
         urls = []
+        #For every item that was recommended by tastedive, we extract all the information from the OMDB database
         for item in recommendationList:
             searchTitle = item.replace(" ", "+")
+            #Making the call to the OMDB Api with the correct key and then formatting with json
             OMDBkey = "564669e8"
             OMDBurl = "http://www.omdbapi.com/?t=" + searchTitle + "&apikey=" + OMDBkey
             OMDB_response_json = urlfetch.fetch(OMDBurl).content
             OMDB_response_raw = json.loads(OMDB_response_json)
             posterKey = unicode("Poster")
             # print(OMDB_response_raw[key])
+            #This function searches through the return from the OMDB database which includes names, dates, titles, genres
+            #And only extracts the poster image
             for key in OMDB_response_raw:
                 if key == posterKey:
                     link = OMDB_response_raw[key]
                     urls.append(link)
                     titleAndPic[item] = link
+        #Search through the OMDB database for an image for the specific item that was actually search for
         OMDBurl = "http://www.omdbapi.com/?t=" + q + "&apikey=" + OMDBkey
         # print(OMDBurl)
         OMDB_response_json = urlfetch.fetch(OMDBurl).content
         OMDB_response_raw = json.loads(OMDB_response_json)
-        # print(OMDB_response_raw)
+        #Retrieve the image out of the returned json database
         posterKey = unicode("Poster")
         for key in OMDB_response_raw:
             if key == posterKey:
