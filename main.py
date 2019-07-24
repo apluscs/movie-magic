@@ -106,7 +106,6 @@ class MovieResultPage(webapp2.RequestHandler):
             "movieInfos": showed_movies,
             "selected_movie": movie_title
         }
-        # print(gracenote_response_raw)
         movie_result_template=jinjaEnv.get_template('movie-result.html')
         self.response.write(movie_result_template.render(movie_result_dict))
 
