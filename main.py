@@ -37,7 +37,7 @@ class LoginPage(webapp2.RequestHandler):
         email_address=user.nickname()   #username
         existing_user=SiteUser.query().filter(SiteUser.email== email_address).get() #get only pulls 1 record
         if existing_user:
-            self.redirect("/?logout_url="+logout_url)  #send to home
+            self.redirect("/")  #send to home
         else:
             self.redirect("/register")   #send to register
     def get(self):
@@ -81,12 +81,23 @@ class ShowsResultPage(webapp2.RequestHandler):
 
 class MovieResultPage(webapp2.RequestHandler):
     def get(self):
-        postalCode="00000"
+        user=users.get_current_user()
+        if not user:
+            print(user)
+            self.redirect("/login")  #send to home for them to login to Google
+            return
+        print(user)
+        email_address=user.nickname()   #username
+        existing_user=SiteUser.query().filter(SiteUser.email== email_address).get() #get only pulls 1 record
+        if not existing_user:
+            self.redirect("/")  #send to home for them to register
+            return
+        zip_code=48098#existing_user.zip_code, will replace after validation step
         date=datetime.datetime.now().strftime("%Y-%m-%d")
-        api_url="http://data.tmsapi.com/v1.1/movies/showings?startDate=%s&zip=%s&api_key=h67cmw3tean6hyyeh58zhf7r" % date % postalCode
-
-        # gracenote_response_json = urlfetch.fetch(api_url).content
-        # gracenote_response_raw = json.loads(gracenote_response_json)
+        api_url="http://data.tmsapi.com/v1.1/movies/showings?startDate=%s&zip=%s&api_key=h67cmw3tean6hyyeh58zhf7r" % (date, zip_code)
+        gracenote_response_json = urlfetch.fetch(api_url).content
+        gracenote_response_raw = json.loads(gracenote_response_json)
+        print(gracenote_response_raw)
 
 
 
