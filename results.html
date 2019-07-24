@@ -8,15 +8,15 @@
 </head>
 
 <body>
-<h1>Your search: {{searchTerm}}</h1>
-<img id="searchedImg" height="250px" width="200px"src="{{url}}"
-<br>
-  <form class="row">
-    {% for item in movieAndPoster %}
-    <img height="150px" width="100px" src="{{movieAndPoster[item]}}"></img>
-    <h4> {{item}} </h4>
-    {% endfor %}
-  </form>
+  <div class="results">
+      {% for item in movieAndPoster %}
+      <div class="resultsDisplay">
+        <h4> {{item}} </h4>
+        <img height="300px" width="200px" src="{{movieAndPoster[item]}}"></img>
+      </div>
+      {% endfor %}
+  </div>
+
 </body>
 
 </html>

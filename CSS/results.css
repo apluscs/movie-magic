@@ -4,3 +4,14 @@
   /* justify-content: space-around; */
 
 }
+.results{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+.resultsDisplay{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
