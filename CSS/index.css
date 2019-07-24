@@ -30,16 +30,16 @@ body{
   margin: auto;
 }
 
-#searchBar{
+/* #searchBar{
   text-align: center;
   height: 100px;
   width: 500px;
   font-size: 25px;
   margin: auto;
-}
+} */
 #searchButton{
-  height: 100px;
-  width: 100px;
-  position: relative;
-  font-size: 20px;
+  height: 100%;
+  /* width: 100px; */
+  /* position: relative;
+  font-size: 20px; */
 }

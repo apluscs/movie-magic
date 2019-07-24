@@ -137,8 +137,10 @@ class ResultsPage(webapp2.RequestHandler):
                     urls.append(link)
                     titleAndPic[item] = link
         OMDBurl = "http://www.omdbapi.com/?t=" + q + "&apikey=" + OMDBkey
+        print(OMDBurl)
         OMDB_response_json = urlfetch.fetch(OMDBurl).content
         OMDB_response_raw = json.loads(OMDB_response_json)
+        # print(OMDB_response_raw)
         posterKey = unicode("Poster")
         for key in OMDB_response_raw:
             if key == posterKey:
@@ -149,7 +151,6 @@ class ResultsPage(webapp2.RequestHandler):
             "movieAndPoster" : titleAndPic,
             'searched' : searchTerm,
             'searchImg' : searchImg
-
         }
         resultsTemplate=jinjaEnv.get_template('results.html')   #gets that html File
         self.response.write(resultsTemplate.render(references))
