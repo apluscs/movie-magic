@@ -26,8 +26,16 @@ body{
   background-size: cover;
 }
 
-#searchedItem{
-  height: 300px;
+.searchedItem{
+  height: 700px;
   width: auto;
-  text-align: right;
+}
+#srcTxt{
+  text-align: center;
+  color: white;
+}
+#srcImg{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }

@@ -14,7 +14,6 @@ class SiteUser(ndb.Model):
 class MainPage(webapp2.RequestHandler): #inheritance
     def get(self):
         user=users.get_current_user()
-        print(user)
         logout_url=users.create_logout_url('/')
         index_template=jinjaEnv.get_template('index.html')
         index_dict={}
@@ -27,7 +26,6 @@ class MainPage(webapp2.RequestHandler): #inheritance
             index_dict={
                 "hideLogOut": "hidden=\"\" "
             }
-        print(index_dict)
         self.response.write(index_template.render(index_dict))
 
 class LoginPage(webapp2.RequestHandler):
@@ -41,13 +39,11 @@ class LoginPage(webapp2.RequestHandler):
             self.redirect("/register")   #send to register
     def get(self):
         user=users.get_current_user()
-        print(user)
         logout_url=users.create_logout_url('/') #redirect to this link
         if user:    #someone is already logged in to gmail
             self.checkExistingUser(logout_url)
         else:   #not a google user
             login_url=users.create_login_url('/login')
-            print(login_url)
             login_dict={
                 "login_url": login_url
             }
@@ -134,14 +130,12 @@ class ResultsPage(webapp2.RequestHandler):
             OMDB_response_raw = json.loads(OMDB_response_json)
             posterKey = unicode("Poster")
             # print(OMDB_response_raw[key])
-            print("*************")
-            print(OMDB_response_raw)
             for key in OMDB_response_raw:
                 if key == posterKey:
                     link = OMDB_response_raw[key]
                     urls.append(link)
                     titleAndPic[item] = link
-        OMDBurl = "http://www.omdbapi.com/?t=" + searchTerm + "&apikey=" + OMDBkey
+        OMDBurl = "http://www.omdbapi.com/?t=" + q + "&apikey=" + OMDBkey
         OMDB_response_json = urlfetch.fetch(OMDBurl).content
         OMDB_response_raw = json.loads(OMDB_response_json)
         posterKey = unicode("Poster")
