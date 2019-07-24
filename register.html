@@ -3,16 +3,24 @@
   <head>
     <meta charset="utf-8">
     <title>Register for Movie-Magic</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="CSS/register.css">
   </head>
   <body>
-    <h1>Please register!</h1>
-    <form method='post' action='/register'>
-        <input type='text' name='first_name' value="first name">
-        <input type='text' name='age' value="age">
-        <input type='text' name='zip_code' value="zip code">
-        <input type='submit'>
-    </form>
-    <!-- <a href="{{logout_url}}"> Log out of Google</a>' -->
-    <br>
+    <div class="jumbotron">
+      <h1 class="display-4">Please register!</h1>
+      <hr class="my-4">
+      <form method="post" action='/register'>
+        <div class="form-row">
+          <div class="col">
+            <input type="text" class="form-control" name='first_name' placeholder="First name">
+          </div>
+          <div class="col">
+            <input type="text" class="form-control" name='zip_code' placeholder="Zip code">
+          </div>
+          <input class="btn btn-primary" type="submit" value="Submit">
+        </div>
+      </form>
+    </div>
   </body>
 </html>
