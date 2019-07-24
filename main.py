@@ -14,7 +14,7 @@ class SiteUser(ndb.Model):
 class MainPage(webapp2.RequestHandler): #inheritance
     def get(self):
         user=users.get_current_user()
-        print(user)
+        # print(user)
         logout_url=users.create_logout_url('/')
         index_template=jinjaEnv.get_template('index.html')
         index_dict={}
@@ -27,7 +27,7 @@ class MainPage(webapp2.RequestHandler): #inheritance
             index_dict={
                 "hideLogOut": "hidden=\"\" "
             }
-        print(index_dict)
+        # print(index_dict)
         self.response.write(index_template.render(index_dict))
 
 class LoginPage(webapp2.RequestHandler):
@@ -41,13 +41,13 @@ class LoginPage(webapp2.RequestHandler):
             self.redirect("/register")   #send to register
     def get(self):
         user=users.get_current_user()
-        print(user)
+        # print(user)
         logout_url=users.create_logout_url('/') #redirect to this link
         if user:    #someone is already logged in to gmail
             self.checkExistingUser(logout_url)
         else:   #not a google user
             login_url=users.create_login_url('/login')
-            print(login_url)
+            # print(login_url)
             login_dict={
                 "login_url": login_url
             }
@@ -98,7 +98,7 @@ class MovieResultPage(webapp2.RequestHandler):
         gracenote_response_json = urlfetch.fetch(api_url).content
         gracenote_response_raw = json.loads(gracenote_response_json)
         showed_movies=[]
-        print(gracenote_response_raw)
+        # print(gracenote_response_raw)
         for movie in gracenote_response_raw:    #need to filter to match movie they selected
             if movie["title"] == movie_title:
                 showed_movies.append(movie)
@@ -122,7 +122,7 @@ class ResultsPage(webapp2.RequestHandler):
         tastedive_response_json = urlfetch.fetch(api_url).content
         tastedive_response_raw = json.loads(tastedive_response_json)
         recommendationList = []
-        print(recommendationList)
+        # print(recommendationList)
         for results in tastedive_response_raw['Similar']['Results'][0:50]:
             recommendationList.append(results["Name"])
         titleAndPic = {}
@@ -141,7 +141,7 @@ class ResultsPage(webapp2.RequestHandler):
                     urls.append(link)
                     titleAndPic[item] = link
         OMDBurl = "http://www.omdbapi.com/?t=" + q + "&apikey=" + OMDBkey
-        print(OMDBurl)
+        # print(OMDBurl)
         OMDB_response_json = urlfetch.fetch(OMDBurl).content
         OMDB_response_raw = json.loads(OMDB_response_json)
         # print(OMDB_response_raw)
