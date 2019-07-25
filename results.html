@@ -14,16 +14,13 @@
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-<<<<<<< HEAD
 
-=======
 <nav class="navbar navbar-light bg-light">
   <form action = "/verify" method = 'post' class="form-inline" autocomplete="off">
     <input name="searchBar" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
   </form>
 </nav>
->>>>>>> a799c6417aa892dcd8789a07bbaaa5bd2635932d
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
@@ -61,7 +58,7 @@
 
     <!-- This makes each image a form and submits the title as a part of the form -->
     {% for item in recomendations %}
-    <form class="resultsDisplay" action="/movie-results" method="post">
+    <form class="resultsDisplay oneResult" action="/movie-results" method="post">
       <div class="resultsDisplay">
         <h4> {{item["title"]}} </h4>
         <input type="hidden" name="movie_title" value="{{item["title"]}}">

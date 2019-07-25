@@ -116,12 +116,7 @@ class MovieResultPage(webapp2.RequestHandler):
             "movie_title":movie_title,
             "movie_info" : TMDB_response_raw
         }
-        logout_url=users.create_logout_url('/')
-        if user:    #someone logged into Google = only show logout feature
-            get_location_dict["logout_url"]= logout_url   #need to hide
-            get_location_dict["hideLogIn"]= "hidden=\"\" "
-        else:   #not logged into Google = only show login feature
-            get_location_dict["hideLogOut"]= "hidden=\"\" "
+        checkLogIn(get_location_dict)
         get_location_template=jinjaEnv.get_template('getLocation.html')
         self.response.write(get_location_template.render(get_location_dict))
 
