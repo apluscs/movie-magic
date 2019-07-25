@@ -1,0 +1,44 @@
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Movie Magic: Find You Next Movie Now</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="CSS/index.css">
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+        </li>
+      </ul>
+      <nav class="navbar navbar-light bg-light">
+        <form action="/verify" method='post' class="form-inline" autocomplete="off">
+          <input name="searchBar" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+      </nav>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+          <a {{hideLogIn}} class="btn btn-light" href='/login' role="button">Login</a>
+        </li>
+        <li>
+          <a {{hideLogOut}} class="btn btn-secondary" href={{logout_url}} role="button">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <br><br>
+
+  <h1 id='header'>*NAME OF MOVIE SELECTED*</h1>
+  <h1>{{searched}}</h1>
+</body>
+
+</html>

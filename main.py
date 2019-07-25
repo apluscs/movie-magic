@@ -6,7 +6,6 @@ from google.appengine.ext import ndb
 import json
 import datetime
 
-
 class SiteUser(ndb.Model):
     first_name=ndb.StringProperty()
     email=ndb.StringProperty()
@@ -135,10 +134,22 @@ class MovieResultPage(webapp2.RequestHandler):
         movie_title=self.request.get('movie_title') #form on getLocation.html is not sending this
         # movie_title=movie_title.replace(' ','_')
         user=users.get_current_user()
+        genre = []
+        for item in TMDB_response_raw['genres']:
+            name = item['name']
+            genre.append(name)
         get_location_dict={
             "movie_title":movie_title,
-            "movie_info" : TMDB_response_raw
+            "movie_info" : TMDB_response_raw,
+            'name' : TMDB_response_raw['original_title'],
+            'overview': TMDB_response_raw['overview'],
+            'poster' : "http://image.tmdb.org/t/p/w185" + TMDB_response_raw['poster_path'],
+            'genre' : genre,
+            'runtime' : TMDB_response_raw['runtime'],
+            'release_date' : TMDB_response_raw['release_date']
+
         }
+
         checkLogIn(get_location_dict)
         get_location_template=jinjaEnv.get_template('getLocation.html')
         self.response.write(get_location_template.render(get_location_dict))
@@ -174,6 +185,8 @@ class ResultsPage(webapp2.RequestHandler):
                     TMDB_response_raw = json.loads(TMDB_response_json)
                     print(TMDB_response_raw)
                     movies = {}
+                    if TMDB_response_raw['total_results'] == 0:
+                        continue
                     movies["title"] = TMDB_response_raw['results'][0]['name']
                     movies["id"] = TMDB_response_raw["results"][0]['id']
                     movies["poster"] = "http://image.tmdb.org/t/p/w185" + TMDB_response_raw["results"][0]['poster_path']
@@ -218,6 +231,8 @@ class ResultsPage(webapp2.RequestHandler):
                     TMDB_response_json = urlfetch.fetch(api_url).content
                     TMDB_response_raw = json.loads(TMDB_response_json)
                     movies = {}
+                    if TMDB_response_raw['total_results'] == 0:
+                        continue
                     movies["title"] = TMDB_response_raw["results"][0]['title']
                     movies["id"] = TMDB_response_raw["results"][0]['id']
                     movies["poster"] = "http://image.tmdb.org/t/p/w185" + TMDB_response_raw["results"][0]['poster_path']
@@ -359,6 +374,7 @@ class VerifyPage(webapp2.RequestHandler):
         self.response.write(verifyTemplate.render(references))
 
 class InfoPage(webapp2.RequestHandler):
+
     pass
 
 
