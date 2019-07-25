@@ -26,7 +26,6 @@ class MainPage(webapp2.RequestHandler): #inheritance
         index_template=jinjaEnv.get_template('index.html')
         index_dict={}
         checkLogIn(index_dict)
-
         self.response.write(index_template.render(index_dict))
 
 class LoginPage(webapp2.RequestHandler):
@@ -40,6 +39,7 @@ class LoginPage(webapp2.RequestHandler):
             self.redirect("/register")   #send to register
     def get(self):
         user=users.get_current_user()
+
         logout_url=users.create_logout_url('/') #redirect to this link
         if user:    #someone is already logged in to gmail
             self.checkExistingUser(logout_url)
@@ -81,10 +81,10 @@ class MovieResultPage(webapp2.RequestHandler):
         user=users.get_current_user()
         movie_title=self.request.get('movie_title')
         zip_code=48098#self.request.get('zip_code')
-        radius=self.request.get('mile_options')
+        radius=self.request.get('mile_options') #raidus feature is down rn
         date=datetime.datetime.now().strftime("%Y-%m-%d")
 
-        api_url="http://data.tmsapi.com/v1.1/movies/showings?startDate=%s&zip=%s&api_key=uy9kumz6mrh8dp5xp4zvtzd9&radius=%s" % (date, zip_code,radius)
+        api_url="http://data.tmsapi.com/v1.1/movies/showings?startDate=%s&zip=%s&api_key=zqhnfqa7uwk9umu23kegjdy8" % (date, zip_code)
         print(api_url)
         gracenote_response_json = urlfetch.fetch(api_url).content
         gracenote_response_raw = json.loads(gracenote_response_json)
@@ -93,12 +93,15 @@ class MovieResultPage(webapp2.RequestHandler):
         for movie in gracenote_response_raw:    #need to filter to match movie they selected
             if movie["title"] == movie_title:
                 showed_movies.append(movie)
-
+                break   #showed_movies should contain only 0 or 1 movies, but just in case it finds 2
+        print(len(showed_movies))
         movie_result_dict={
             "movieInfos": showed_movies,
-            "selected_movie": movie_title
+            "selected_movie": movie_title,
+            "found": "1"
         }
         checkLogIn(movie_result_dict)
+        # print(showed_movies[0])
         movie_result_template=jinjaEnv.get_template('movie-result.html')
         self.response.write(movie_result_template.render(movie_result_dict))
     def post(self): #post from clicking movie on ResultsPage

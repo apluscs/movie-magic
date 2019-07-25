@@ -1,9 +1,3 @@
-div.item{
-  vertical-align: top;
-  display: inline-block;
-  text-align: center;
-  width: 120px;
-}
 
 .results{
   display: flex;
@@ -26,9 +20,9 @@ body{
   background-size: cover;
 }
 
-.searchedItem{
-  height: 700px;
-  width: auto;
+.form-row{
+  margin-left: auto;
+  margin-right: auto;
 }
 #srcTxt{
   text-align: center;
@@ -39,11 +33,18 @@ body{
   margin-left: auto;
   margin-right: auto;
 }
-
+h1{
+  text-align: center;
+  color: white;
+}
 #searchBar{
   text-align: center;
-  height: 100px;
+  height: 50px;
   width: 500px;
   font-size: 25px;
   margin: auto;
+}
+#search{
+    display: block;
+    text-align: center;
 }
