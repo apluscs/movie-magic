@@ -31,20 +31,14 @@
       </ul>
     </div>
   </nav>
-
+  <br><br>
   <div class="searchedItem">
     <h1 id='srcTxt'>You searched for: {{searched}} </h1>
     <img id="srcImg" height="600px" width='400px' src='{{searchImg}}' />
   </div>
   <h1>Similar movies: </h1>
   <div class="results">
-    <!-- This is the old method for images linking to a new page -->
-    <!-- {% for item in movieAndPoster %}
-      <div class="resultsDisplay">
-        <h4> {{item}} </h4>
-        <a href="/movie-results"><img height="300px" width="200px" src="{{movieAndPoster[item]}}"></img></a>
-      </div>
-      {% endfor %} -->
+
     <!-- This makes each image a form and submits the title as a part of the form -->
     {% for item in movieAndPoster %}
     <form class="resultsDisplay" action="/movie-results" method="post">

@@ -11,22 +11,20 @@ class SiteUser(ndb.Model):
     email=ndb.StringProperty()
     zip_code=ndb.StringProperty()
 
+def checkLogIn(template):
+    logout_url=users.create_logout_url('/')
+    user=users.get_current_user()
+    if user:    #someone logged into Google = only show logout feature
+        template["logout_url"]= logout_url   #need to hide
+        template["hideLogIn"]= "hidden=\"\" "
+    else:   #not logged into Google = only show login feature
+        template["hideLogOut"]= "hidden=\"\" "  #checks if someone is logged in to google and offers the appropriate way out 
+
 class MainPage(webapp2.RequestHandler): #inheritance
     def get(self):
-        user=users.get_current_user()
-
-        logout_url=users.create_logout_url('/')
         index_template=jinjaEnv.get_template('index.html')
         index_dict={}
-        if user:    #someone logged into Google = only show logout feature
-            index_dict={
-                "logout_url": logout_url,    #need to hide
-                "hideLogIn": "hidden=\"\" "
-            }
-        else:   #not logged into Google = only show login feature
-            index_dict={
-                "hideLogOut": "hidden=\"\" "
-            }
+        checkLogIn(index_dict)
 
         self.response.write(index_template.render(index_dict))
 
@@ -94,25 +92,29 @@ class MovieResultPage(webapp2.RequestHandler):
         for movie in gracenote_response_raw:    #need to filter to match movie they selected
             if movie["title"] == movie_title:
                 showed_movies.append(movie)
+
         movie_result_dict={
             "movieInfos": showed_movies,
             "selected_movie": movie_title
         }
+        checkLogIn(movie_result_dict)
         movie_result_template=jinjaEnv.get_template('movie-result.html')
         self.response.write(movie_result_template.render(movie_result_dict))
     def post(self): #post from clicking movie on ResultsPage
         movie_title=self.request.get('movie_title') #form on getLocation.html is not sending this
         # movie_title=movie_title.replace(' ','_')
-
+        user=users.get_current_user()
         get_location_dict={
             "movie_title":movie_title
         }
+        logout_url=users.create_logout_url('/')
+        if user:    #someone logged into Google = only show logout feature
+            get_location_dict["logout_url"]= logout_url   #need to hide
+            get_location_dict["hideLogIn"]= "hidden=\"\" "
+        else:   #not logged into Google = only show login feature
+            get_location_dict["hideLogOut"]= "hidden=\"\" "
         get_location_template=jinjaEnv.get_template('getLocation.html')
         self.response.write(get_location_template.render(get_location_dict))
-
-class GetLocationPage(webapp2.RequestHandler):
-    def get(self):
-        pass
 
 class ResultsPage(webapp2.RequestHandler):
     def get(self):
@@ -168,6 +170,7 @@ class ResultsPage(webapp2.RequestHandler):
             'searched' : searchTerm,
             'searchImg' : searchImg
         }
+        checkLogIn(references)
         resultsTemplate=jinjaEnv.get_template('results.html')   #gets that html File
         self.response.write(resultsTemplate.render(references))
 
