@@ -77,11 +77,6 @@ class ShowsResultPage(webapp2.RequestHandler):
     def get(self):
         pass
 
-class Theatre():
-    def __init__(self,name):
-        self.showtimes=[]
-        self.name=name
-
 class Showtime():
     def __init__(self,dateTime,ticketURI):
         self.dateTime=dateTime.replace('T',' ')
