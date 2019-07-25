@@ -49,7 +49,7 @@
 
     <!-- This makes each image a form and submits the title as a part of the form -->
     {% for item in recomendations %}
-    <form class="resultsDisplay" action="/movie-results" method="post">
+    <form class="resultsDisplay" action="/info" method="post">
       <div class="resultsDisplay">
         <h4> {{item["title"]}} </h4>
         <input type="hidden" name="movie_title" value="{{item["title"]}}">
