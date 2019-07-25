@@ -1,107 +1,98 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>All About {{selected_movie}}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+      .jumbotron{
+        margin: 10% 20% auto 20%;
+      }
+      .showtimes{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+      }
+      .showtime{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-size: 15px;
+        border-radius: 15%;
+        border: 1px solid black;
+      }
+      .body{
+        padding: 5%;
+      }
+      .heading{
+        text-align: center;
+        margin: 10px;
+      }
+      .card{
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+          </li>
+        </ul>
+        <nav class="navbar navbar-light bg-light bar">
+          <form action = "/results" method = 'post' class="form-inline">
+            <input name="searchBar" class="form-control mr-sm-2" type="search" placeholder="Search for another movie" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+          </form>
+        </nav>
 
-<head>
-  <meta charset="utf-8">
-  <title>All About {{selected_movie}}</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <style>
-    .jumbotron {
-      margin: 10% 20% auto 20%;
-    }
-
-    .showtimes {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      justify-content: space-evenly;
-    }
-
-    .showtime {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      font-size: 15px;
-      border-radius: 15%;
-      border: 1px solid black;
-    }
-
-    .body {
-      padding: 5%;
-    }
-
-    .heading {
-      text-align: center;
-      margin: 10px;
-    }
-
-    .card {
-      margin-top: 20px;
-    }
-  </style>
-</head>
-
-<body>
-  <h1>hello</h1>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-        </li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li>
-          <a {{hideLogIn}} class="btn btn-light" href='/login' role="button">Login</a>
-        </li>
-        <li>
-          <a {{hideLogOut}} class="btn btn-secondary" href={{logout_url}} role="button">Logout</a>
-        </li>
-      </ul>
-    </div>
-  </nav>
- <br><br><br>
- <h1>hello</h1>
-  {% if not movieInfos %}
-  <div class="jumbotron">
-    <h1 class="display-4">There are no showtimes for this movie.</h1>
-    <hr class="my-4">
-    <button onclick="goBack()" class="btn btn-primary">Choose a different movie</button>
-  </div>
-  {%else%}
-  <h4 class="display-4 heading"> Nearby Showtimes for {{selected_movie}} </h4>
-
-  <div class="showtimes">
-
-
-
-    {% for showtime in movieInfos[0].showtimes %}
-
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">Theatre: {{showtime.theatre.name}}</h5>
-        <p class="card-text">Date: {{showtime.dateTime}}</p>
-        {% if showtime.ticketURI %}
-        <a href={{showtime.ticketURI}} class="btn btn-primary">Buy tickets</a>
-        {% endif %}
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            <a {{hideLogIn}} class="btn btn-light" href='/login' role="button">Login</a>
+          </li>
+          <li>
+            <a {{hideLogOut}} class="btn btn-secondary" href={{logout_url}} role="button">Logout</a>
+          </li>
+        </ul>
       </div>
-    </div>
+    </nav>
+<div>
+      {% if not movieInfos %}
+      <div class="jumbotron">
+        <h1 class="display-4">There are no showtimes for this movie.</h1>
+        <hr class="my-4">
+        <button onclick="goBack()" class="btn btn-primary">Choose a different movie</button>
+      </div>
+      {%else%}
+      <h4 class="display-4 heading"> Nearby Showtimes for <strong> {{selected_movie}}</strong> </h4>
 
+      <div class="showtimes">
+          {% for showtime in movieInfos[0].showtimes %}
 
-
-    {% endfor %}
-  </div>
-  {% endif %}
-  <br><br><br>
-  <script>
-    function goBack() { //goes back without actually reloading the page :D
-      window.history.go(-2);
-    }
-  </script>
-</body>
-
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Theatre: {{showtime.theatre.name}}</h5>
+              <p class="card-text">Date: {{showtime.dateTime}}</p>
+              {% if showtime.ticketURI %}
+                <a href={{showtime.ticketURI}} class="btn btn-primary">Buy tickets</a>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+          </div>
+          {% endif %}
+          <br><br><br>
+    <script>
+      function goBack() { //goes back without actually reloading the page :D
+        window.history.go(-2);
+      }
+    </script>
+  </body>
 </html>

@@ -18,6 +18,13 @@
             <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
           </li>
         </ul>
+        <nav class="navbar navbar-light bg-light bar">
+          <form action = "/results" method = 'post' class="form-inline">
+            <input name="searchBar" class="form-control mr-sm-2" type="search" placeholder="Search for another movie" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+          </form>
+        </nav>
+
         <ul class="nav navbar-nav navbar-right">
           <li>
             <a {{hideLogIn}} class="btn btn-light" href='/login' role="button">Login</a>
@@ -28,6 +35,7 @@
         </ul>
       </div>
     </nav>
+
     
     <div class="jumbotron">
       <h1 class="display-6">Please fill out this form to get showtimes for <strong>{{movie_title}}</strong>.</h1>
@@ -38,13 +46,11 @@
           <input type="text" name="zip_code" value="" placeholder="Zip code">
           <br>
         </div>
-        <!--
-        <h5>How far are you willing to drive to see [this movie]?</h5>
-        <input type="text" name="radius" value="" placeholder=""> -->
+
         <div class="form-group">
           <h5 for="mile-options">How many miles are you willing to drive to see <strong>{{movie_title}}</strong>?</h5>
           <select class="form-control col-lg-3" id="mile-options" name="mile_options">
-            {% for i in range(1,16,2) %}
+            {% for i in range(5,16,2) %}
             <option>{{i}}</option>
             {%endfor%}
             {% for i in range(20,101,5) %}

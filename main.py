@@ -81,10 +81,10 @@ class MovieResultPage(webapp2.RequestHandler):
         user=users.get_current_user()
         movie_title=self.request.get('movie_title')
         zip_code=48098#self.request.get('zip_code')
-        radius=self.request.get('mile_options') #raidus feature is down rn
+        radius=self.request.get('mile_options') #minimum GraceNote allows is 5 mi
         date=datetime.datetime.now().strftime("%Y-%m-%d")
 
-        api_url="http://data.tmsapi.com/v1.1/movies/showings?startDate=%s&zip=%s&api_key=zqhnfqa7uwk9umu23kegjdy8" % (date, zip_code)
+        api_url="http://data.tmsapi.com/v1.1/movies/showings?startDate=%s&zip=%s&api_key=h67cmw3tean6hyyeh58zhf7r&radius=%s" % (date, zip_code,radius)
         print(api_url)
         gracenote_response_json = urlfetch.fetch(api_url).content
         gracenote_response_raw = json.loads(gracenote_response_json)
@@ -101,7 +101,6 @@ class MovieResultPage(webapp2.RequestHandler):
             "found": "1"
         }
         checkLogIn(movie_result_dict)
-        # print(showed_movies[0])
         movie_result_template=jinjaEnv.get_template('movie-result.html')
         self.response.write(movie_result_template.render(movie_result_dict))
     def post(self): #post from clicking movie on ResultsPage
@@ -117,12 +116,7 @@ class MovieResultPage(webapp2.RequestHandler):
             "movie_title":movie_title,
             "movie_info" : TMDB_response_raw
         }
-        logout_url=users.create_logout_url('/')
-        if user:    #someone logged into Google = only show logout feature
-            get_location_dict["logout_url"]= logout_url   #need to hide
-            get_location_dict["hideLogIn"]= "hidden=\"\" "
-        else:   #not logged into Google = only show login feature
-            get_location_dict["hideLogOut"]= "hidden=\"\" "
+        checkLogIn(get_location_dict)
         get_location_template=jinjaEnv.get_template('getLocation.html')
         self.response.write(get_location_template.render(get_location_dict))
 
@@ -136,56 +130,105 @@ class ResultsPage(webapp2.RequestHandler):
         searchTerm = self.request.get("id")
         searchTitle = self.request.get("title")
         searchImg = self.request.get("poster")
-        if (date < "2019"): #Use Tastedive for recommendations
-            q = searchTitle.replace(" ","+")
-            tastedivekey = "341009-MovieMag-4Y8KEEUH"
-            api_url = "https://tastedive.com/api/similar?q=" + q +"&k=" + tastedivekey
-            tastedive_response_json = urlfetch.fetch(api_url).content
-            tastedive_response_raw = json.loads(tastedive_response_json)
-            tasteDiveRecommendationList = []
-            for results in tastedive_response_raw['Similar']['Results'][0:50]:
-                tasteDiveRecommendationList.append(results["Name"])
-            recommendationList = []
-            for item in tasteDiveRecommendationList:
-                q = item.replace(" ", "+")
+        type = self.request.get("type")
+        if type == "TV":
+            if (date < "2019"): #Use Tastedive for recommendations
+                q = searchTitle.replace(" ","+")
+                tastedivekey = "341009-MovieMag-4Y8KEEUH"
+                api_url = "https://tastedive.com/api/similar?q=" + q +"&k=" + tastedivekey
+                tastedive_response_json = urlfetch.fetch(api_url).content
+                tastedive_response_raw = json.loads(tastedive_response_json)
+                tasteDiveRecommendationList = []
+                for results in tastedive_response_raw['Similar']['Results'][0:50]:
+                    tasteDiveRecommendationList.append(results["Name"])
+                recommendationList = []
+                for item in tasteDiveRecommendationList:
+                    q = item.replace(" ", "+")
+                    TMDBkey = "e2648a8f2ae94cef44c1fcfbf7a0f461"
+                    api_url = "https://api.themoviedb.org/3/search/tv?api_key=" + TMDBkey +"&query=" + q
+                    TMDB_response_json = urlfetch.fetch(api_url).content
+                    TMDB_response_raw = json.loads(TMDB_response_json)
+                    movies = {}
+                    movies["title"] = TMDB_response_raw["results"][0]['name']
+                    movies["id"] = TMDB_response_raw["results"][0]['id']
+                    movies["poster"] = "http://image.tmdb.org/t/p/w185" + TMDB_response_raw["results"][0]['poster_path']
+                    recommendationList.append(movies)
+                print("tastedive")
+                #Makes the searchTerm into a url compatable string
+                # q = searchTerm.replace(" ","+")
+                #Make the tastedivekey and use the URL to retrieve data from the tastedive API
+            else:
                 TMDBkey = "e2648a8f2ae94cef44c1fcfbf7a0f461"
-                api_url = "https://api.themoviedb.org/3/search/movie?api_key=" + TMDBkey +"&query=" + q
+                api_url = "https://api.themoviedb.org/3/tv/" + searchTerm + "/similar?api_key=" + TMDBkey
                 TMDB_response_json = urlfetch.fetch(api_url).content
                 TMDB_response_raw = json.loads(TMDB_response_json)
-                movies = {}
-                movies["title"] = TMDB_response_raw["results"][0]['title']
-                movies["id"] = TMDB_response_raw["results"][0]['id']
-                movies["poster"] = "http://image.tmdb.org/t/p/w185" + TMDB_response_raw["results"][0]['poster_path']
-                recommendationList.append(movies)
-            print("tastedive")
-        #Makes the searchTerm into a url compatable string
-        # q = searchTerm.replace(" ","+")
-        #Make the tastedivekey and use the URL to retrieve data from the tastedive API
+                recommendationList = []
+                for item in TMDB_response_raw["results"]:
+                    if item['poster_path'] == None:
+                        continue
+                    title = item['name']
+                    photo = item['poster_path']
+                    id = item['id']
+                    photoURL = "http://image.tmdb.org/t/p/w185" + photo
+                    movieDict = {}
+                    movieDict["title"] = title
+                    movieDict["poster"] = photoURL
+                    movieDict["id"] = id
+                    recommendationList.append(movieDict)
+                print("TMDB")
         else:
-            TMDBkey = "e2648a8f2ae94cef44c1fcfbf7a0f461"
-            api_url = "https://api.themoviedb.org/3/movie/" + searchTerm + "/similar?api_key=" + TMDBkey
-            TMDB_response_json = urlfetch.fetch(api_url).content
-            TMDB_response_raw = json.loads(TMDB_response_json)
-            recommendationList = []
-
-            for item in TMDB_response_raw["results"]:
-                if item['poster_path'] == None:
-                    continue
-                title = item['title']
-                photo = item['poster_path']
-                id = item['id']
-                photoURL = "http://image.tmdb.org/t/p/w185" + photo
-                movieDict = {}
-                movieDict["title"] = title
-                movieDict["poster"] = photoURL
-                movieDict["id"] = id
-                recommendationList.append(movieDict)
-            print("TMDB")
+            if (date < "2019"): #Use Tastedive for recommendations
+                q = searchTitle.replace(" ","+")
+                tastedivekey = "341009-MovieMag-4Y8KEEUH"
+                api_url = "https://tastedive.com/api/similar?q=" + q +"&k=" + tastedivekey
+                tastedive_response_json = urlfetch.fetch(api_url).content
+                tastedive_response_raw = json.loads(tastedive_response_json)
+                tasteDiveRecommendationList = []
+                for results in tastedive_response_raw['Similar']['Results'][0:50]:
+                    tasteDiveRecommendationList.append(results["Name"])
+                recommendationList = []
+                for item in tasteDiveRecommendationList:
+                    q = item.replace(" ", "+")
+                    TMDBkey = "e2648a8f2ae94cef44c1fcfbf7a0f461"
+                    api_url = "https://api.themoviedb.org/3/search/movie?api_key=" + TMDBkey +"&query=" + q
+                    TMDB_response_json = urlfetch.fetch(api_url).content
+                    TMDB_response_raw = json.loads(TMDB_response_json)
+                    movies = {}
+                    movies["title"] = TMDB_response_raw["results"][0]['title']
+                    movies["id"] = TMDB_response_raw["results"][0]['id']
+                    movies["poster"] = "http://image.tmdb.org/t/p/w185" + TMDB_response_raw["results"][0]['poster_path']
+                    recommendationList.append(movies)
+                print("tastedive")
+                #Makes the searchTerm into a url compatable string
+                # q = searchTerm.replace(" ","+")
+                #Make the tastedivekey and use the URL to retrieve data from the tastedive API
+            else:
+                TMDBkey = "e2648a8f2ae94cef44c1fcfbf7a0f461"
+                api_url = "https://api.themoviedb.org/3/movie/" + searchTerm + "/similar?api_key=" + TMDBkey
+                TMDB_response_json = urlfetch.fetch(api_url).content
+                TMDB_response_raw = json.loads(TMDB_response_json)
+                recommendationList = []
+                for item in TMDB_response_raw["results"]:
+                    if item['poster_path'] == None:
+                        continue
+                    title = item['title']
+                    photo = item['poster_path']
+                    id = item['id']
+                    photoURL = "http://image.tmdb.org/t/p/w185" + photo
+                    movieDict = {}
+                    movieDict["title"] = title
+                    movieDict["poster"] = photoURL
+                    movieDict["id"] = id
+                    recommendationList.append(movieDict)
+                print("TMDB")
         references = {
             "recomendations" : recommendationList,
             'searched' : searchTitle,
-            'searchImg' : searchImg
+            'searchImg' : searchImg,
+            'type' : type
+
          }
+        checkLogIn(references)
         resultsTemplate=jinjaEnv.get_template('results.html')   #gets that html File
         self.response.write(resultsTemplate.render(references))
         # print(recommendationList)
@@ -233,30 +276,60 @@ class ResultsPage(webapp2.RequestHandler):
 
 class VerifyPage(webapp2.RequestHandler):
     def post(self):
-        searchTerm = self.request.get("searchBar")
-        #Makes the searchTerm into a url compatable string
-        q = searchTerm.replace(" ","+")
-        TMDBkey = "e2648a8f2ae94cef44c1fcfbf7a0f461"
-        api_url = "https://api.themoviedb.org/3/search/movie?api_key=" + TMDBkey +"&query=" + q
-        TMDB_response_json = urlfetch.fetch(api_url).content
-        TMDB_response_raw = json.loads(TMDB_response_json)
-        possibleMovies = []
-        for item in TMDB_response_raw["results"]:
-            if item['poster_path'] == None:
-                continue
-            title = item['title']
-            photo = item['poster_path']
-            id = item['id']
-            date = item['release_date']
-            photoURL = "http://image.tmdb.org/t/p/w185" + photo
-            movieDict = {}
-            movieDict["title"] = title
-            movieDict["poster"] = photoURL
-            movieDict["id"] = id
-            movieDict["date"] = date
-            possibleMovies.append(movieDict)
+        switch = self.request.get("switch")
+        print(switch)
+        if switch == "TV":
+            type = "TV"
+            searchTerm = self.request.get("searchBar")
+                        #Makes the searchTerm into a url compatable string
+            q = searchTerm.replace(" ","+")
+            TMDBkey = "e2648a8f2ae94cef44c1fcfbf7a0f461"
+            api_url = "https://api.themoviedb.org/3/search/tv?api_key=" + TMDBkey +"&query=" + q
+            TMDB_response_json = urlfetch.fetch(api_url).content
+            TMDB_response_raw = json.loads(TMDB_response_json)
+            print(TMDB_response_raw)
+            possibleMovies = []
+            for item in TMDB_response_raw["results"]:
+                if item['poster_path'] == None:
+                    continue
+                title = item['name']
+                photo = item['poster_path']
+                id = item['id']
+                date = item['first_air_date']
+                photoURL = "http://image.tmdb.org/t/p/w185" + photo
+                movieDict = {}
+                movieDict["title"] = title
+                movieDict["poster"] = photoURL
+                movieDict["id"] = id
+                movieDict["date"] = date
+                possibleMovies.append(movieDict)
+        else:
+            type = "MOVIE"
+            searchTerm = self.request.get("searchBar")
+            #Makes the searchTerm into a url compatable string
+            q = searchTerm.replace(" ","+")
+            TMDBkey = "e2648a8f2ae94cef44c1fcfbf7a0f461"
+            api_url = "https://api.themoviedb.org/3/search/movie?api_key=" + TMDBkey +"&query=" + q
+            TMDB_response_json = urlfetch.fetch(api_url).content
+            TMDB_response_raw = json.loads(TMDB_response_json)
+            possibleMovies = []
+            for item in TMDB_response_raw["results"]:
+                if item['poster_path'] == None:
+                    continue
+                title = item['title']
+                photo = item['poster_path']
+                id = item['id']
+                date = item['release_date']
+                photoURL = "http://image.tmdb.org/t/p/w185" + photo
+                movieDict = {}
+                movieDict["title"] = title
+                movieDict["poster"] = photoURL
+                movieDict["id"] = id
+                movieDict["date"] = date
+                possibleMovies.append(movieDict)
         references = {
-            "possibleMovies" : possibleMovies
+            "possibleMovies" : possibleMovies,
+            "type" : type
         }
         verifyTemplate=jinjaEnv.get_template('verify.html')   #gets that html File
         self.response.write(verifyTemplate.render(references))
