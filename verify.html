@@ -38,7 +38,7 @@
     <!-- This makes each image a form and submits the title as a part of the form -->
     {% for item in possibleMovies %}
     <form class="resultsDisplay" action="/results" method="post">
-      <div class="resultsDisplay">
+      <div class="resultsDisplay oneResult">
         <h4> {{item["title"]}} </h4>
         <input type="hidden" name="title" value="{{item["title"]}}">
         <input type="hidden" name="id" value="{{item["id"]}}">

@@ -229,6 +229,7 @@ class ResultsPage(webapp2.RequestHandler):
             'type' : type
 
          }
+        checkLogIn(references)
         resultsTemplate=jinjaEnv.get_template('results.html')   #gets that html File
         self.response.write(resultsTemplate.render(references))
         # print(recommendationList)
