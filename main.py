@@ -80,10 +80,10 @@ class MovieResultPage(webapp2.RequestHandler):
         user=users.get_current_user()
         movie_title=self.request.get('movie_title')
         zip_code=48098#self.request.get('zip_code')
-        radius=self.request.get('mile_options') #raidus feature is down rn
+        radius=self.request.get('mile_options') #minimum GraceNote allows is 5 mi
         date=datetime.datetime.now().strftime("%Y-%m-%d")
 
-        api_url="http://data.tmsapi.com/v1.1/movies/showings?startDate=%s&zip=%s&api_key=zqhnfqa7uwk9umu23kegjdy8" % (date, zip_code)
+        api_url="http://data.tmsapi.com/v1.1/movies/showings?startDate=%s&zip=%s&api_key=h67cmw3tean6hyyeh58zhf7r&radius=%s" % (date, zip_code,radius)
         print(api_url)
         gracenote_response_json = urlfetch.fetch(api_url).content
         gracenote_response_raw = json.loads(gracenote_response_json)
@@ -100,7 +100,6 @@ class MovieResultPage(webapp2.RequestHandler):
             "found": "1"
         }
         checkLogIn(movie_result_dict)
-        # print(showed_movies[0])
         movie_result_template=jinjaEnv.get_template('movie-result.html')
         self.response.write(movie_result_template.render(movie_result_dict))
     def post(self): #post from clicking movie on ResultsPage
