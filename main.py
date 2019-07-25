@@ -18,7 +18,7 @@ def checkLogIn(template):
         template["logout_url"]= logout_url   #need to hide
         template["hideLogIn"]= "hidden=\"\" "
     else:   #not logged into Google = only show login feature
-        template["hideLogOut"]= "hidden=\"\" "  #checks if someone is logged in to google and offers the appropriate way out 
+        template["hideLogOut"]= "hidden=\"\" "  #checks if someone is logged in to google and offers the appropriate way out
 
 class MainPage(webapp2.RequestHandler): #inheritance
     def get(self):
@@ -83,7 +83,7 @@ class MovieResultPage(webapp2.RequestHandler):
         radius=self.request.get('mile_options')
         date=datetime.datetime.now().strftime("%Y-%m-%d")
 
-        api_url="http://data.tmsapi.com/v1.1/movies/showings?startDate=%s&zip=%s&api_key=uy9kumz6mrh8dp5xp4zvtzd9" % (date, zip_code)
+        api_url="http://data.tmsapi.com/v1.1/movies/showings?startDate=%s&zip=%s&api_key=uy9kumz6mrh8dp5xp4zvtzd9&radius=%s" % (date, zip_code,radius)
         print(api_url)
         gracenote_response_json = urlfetch.fetch(api_url).content
         gracenote_response_raw = json.loads(gracenote_response_json)
