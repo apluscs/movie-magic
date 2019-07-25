@@ -112,10 +112,22 @@ class MovieResultPage(webapp2.RequestHandler):
         movie_title=self.request.get('movie_title') #form on getLocation.html is not sending this
         # movie_title=movie_title.replace(' ','_')
         user=users.get_current_user()
+        genre = []
+        for item in TMDB_response_raw['genres']:
+            name = item['name']
+            genre.append(name)
         get_location_dict={
             "movie_title":movie_title,
-            "movie_info" : TMDB_response_raw
+            "movie_info" : TMDB_response_raw,
+            'name' : TMDB_response_raw['original_title'],
+            'overview': TMDB_response_raw['overview'],
+            'poster' : "http://image.tmdb.org/t/p/w185" + TMDB_response_raw['poster_path'],
+            'genre' : genre,
+            'runtime' : TMDB_response_raw['runtime'],
+            'release_date' : TMDB_response_raw['release_date']
+
         }
+
         checkLogIn(get_location_dict)
         get_location_template=jinjaEnv.get_template('getLocation.html')
         self.response.write(get_location_template.render(get_location_dict))
