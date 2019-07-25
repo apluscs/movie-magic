@@ -8,6 +8,31 @@
       .jumbotron{
         margin: 10% 20% auto 20%;
       }
+      .showtimes{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+      }
+      .showtime{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-size: 15px;
+        border-radius: 15%;
+        border: 1px solid black;
+      }
+      .body{
+        padding: 5%;
+      }
+      .heading{
+        text-align: center;
+        margin: 10px;
+      }
+      .card{
+        margin-top: 20px;
+      }
     </style>
   </head>
   <body>
@@ -32,29 +57,38 @@
         </ul>
       </div>
     </nav>
-    
     <div>
-        {% if not movieInfos: %}
-        <div class="jumbotron">
-          <h1 class="display-4">There are no showtimes for this movie.</h1>
-          <hr class="my-4">
-          <button onclick="goBack()" class="btn btn-primary">Choose a different movie</button>
-        </div>
-        {% endif %}
-        {% for movie in movieInfos %}
-        <div class="movie-info">
-          <h4> Nearby Showtimes for {{movie.title}} </h4>
-          <p> {% for showtime in movie.showtimes %}
-              Theatre: {{showtime.theatre.name}} <br>
-              Date: {{showtime.dateTime}} <br>
-              Buy tickets <a href={{showtime.ticketURI}}>here</a> <br><br>
-            {% endfor %}
-          </p>
-          <br>
-        </div>
-        {% endfor %}
-    </div>
+      {% if not movieInfos %}
+      <div class="jumbotron">
+        <h1 class="display-4">There are no showtimes for this movie.</h1>
+        <hr class="my-4">
+        <button onclick="goBack()" class="btn btn-primary">Choose a different movie</button>
+      </div>
+      {%else%}
+      <h4 class="display-4 heading"> Nearby Showtimes for {{selected_movie}} </h4>
 
+      <div class="showtimes">
+
+
+
+          {% for showtime in movieInfos[0].showtimes %}
+
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Theatre: {{showtime.theatre.name}}</h5>
+              <p class="card-text">Date: {{showtime.dateTime}}</p>
+              {% if showtime.ticketURI %}
+                <a href={{showtime.ticketURI}} class="btn btn-primary">Buy tickets</a>
+              {% endif %}
+            </div>
+          </div>
+
+
+
+        {% endfor %}
+          </div>
+          {% endif %}
+          <br><br><br>
     <script>
       function goBack() { //goes back without actually reloading the page :D
         window.history.go(-2);
