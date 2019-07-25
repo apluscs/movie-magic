@@ -12,6 +12,7 @@ class SiteUser(ndb.Model):
     email=ndb.StringProperty()
     zip_code=ndb.StringProperty()
 
+
 def checkLogIn(template):
     logout_url=users.create_logout_url('/')
     user=users.get_current_user()
@@ -76,6 +77,16 @@ class ShowsResultPage(webapp2.RequestHandler):
     def get(self):
         pass
 
+class Theatre():
+    def __init__(self,name):
+        self.showtimes=[]
+        self.name=name
+
+class Showtime():
+    def __init__(self,dateTime,ticketURI):
+        self.dateTime=dateTime.replace('T',' ')
+        self.ticketURI=ticketURI
+
 class MovieResultPage(webapp2.RequestHandler):
     def get(self):  #from getLocation.html
         user=users.get_current_user()
@@ -84,25 +95,42 @@ class MovieResultPage(webapp2.RequestHandler):
         radius=self.request.get('mile_options') #minimum GraceNote allows is 5 mi
         date=datetime.datetime.now().strftime("%Y-%m-%d")
 
-        api_url="http://data.tmsapi.com/v1.1/movies/showings?startDate=%s&zip=%s&api_key=h67cmw3tean6hyyeh58zhf7r&radius=%s" % (date, zip_code,radius)
+        api_url="http://data.tmsapi.com/v1.1/movies/showings?startDate=%s&zip=%s&api_key=f5ty9m8fjg5hbwby658ccc75&radius=%s" % (date, zip_code,radius)
         print(api_url)
         gracenote_response_json = urlfetch.fetch(api_url).content
         gracenote_response_raw = json.loads(gracenote_response_json)
-        showed_movies=[]
+        showed_movie=""
         # print(gracenote_response_raw)
         for movie in gracenote_response_raw:    #need to filter to match movie they selected
             if movie["title"] == movie_title:
-                showed_movies.append(movie)
+                showed_movie=movie
                 break   #showed_movies should contain only 0 or 1 movies, but just in case it finds 2
-        print(len(showed_movies))
+        showtime_dict=self.groupByTheatre(showed_movie)
         movie_result_dict={
-            "movieInfos": showed_movies,
-            "selected_movie": movie_title,
-            "found": "1"
+            "showtime_dict":showtime_dict,
+            "selected_movie": movie_title
         }
         checkLogIn(movie_result_dict)
+
         movie_result_template=jinjaEnv.get_template('movie-result.html')
         self.response.write(movie_result_template.render(movie_result_dict))
+    def groupByTheatre(self,showed_movie):   #return array of Theatres
+        if not showed_movie["showtimes"]:
+            return
+        showtimes=showed_movie["showtimes"]
+        dict={} #each theatre has many showtimes
+        for showtime in showtimes:
+            # print(showtime["theatre"]["name"])
+            # theatre_name=dict[showtime["theatre"]["name"]]
+            if showtime["theatre"]["name"] not in dict:
+                dict[showtime["theatre"]["name"]]=[]
+            ticketURI=""
+            if "ticketURI" in showtime:
+                ticketURI=showtime["ticketURI"]
+            newShow=Showtime(showtime["dateTime"],ticketURI)
+            dict[showtime["theatre"]["name"]].append(newShow)
+        # print(dict.items())
+        return dict
     def post(self): #post from clicking movie on ResultsPage
         id = self.request.get("id")
         api_url = "https://api.themoviedb.org/3/movie/" + id + "?api_key=e2648a8f2ae94cef44c1fcfbf7a0f461"

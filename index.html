@@ -42,20 +42,21 @@
   <h3 id="header">Find your next movie or show now</h3>
   <form class='searching' action = "/verify" method = 'post' autocomplete="off">
       <div class="form-row">
-        <div class="form-group col-lg-10">
+        <div class="form-group col-lg-8">
           <input id="searchBar" class="form-control form-control-lg" type="text" placeholder="What movies do you enjoy?" name = "searchBar">
+        </div>
+        <div class="form-group col-lg-2 onoffswitch">
+          <input type="checkbox" name="switch" class="onoffswitch-checkbox" id="myonoffswitch" value = "TV">
+          <label class="onoffswitch-label" for="myonoffswitch">
+              <span class="onoffswitch-inner"></span>
+              <span class="onoffswitch-switch"></span>
+          </label>
         </div>
         <div class="form-group col-lg-2">
           <button id= "searchButton" type="submit" name='search' type="button" class="btn btn-light">Search</button>
         </div>
       </div>
-      <div class="onoffswitch">
-    <input type="checkbox" name="switch" class="onoffswitch-checkbox" id="myonoffswitch" value = "TV">
-    <label class="onoffswitch-label" for="myonoffswitch">
-        <span class="onoffswitch-inner"></span>
-        <span class="onoffswitch-switch"></span>
-    </label>
-  </div>
+
     <!-- <input type="text" name="searchBar" placeholder="What Movies do you enjoy?"> -->
   </form>
 </body>

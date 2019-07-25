@@ -4,6 +4,9 @@
     <meta charset="utf-8">
     <title>All About {{selected_movie}}</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <style>
       .jumbotron{
         margin: 10% 20% auto 20%;
@@ -13,15 +16,16 @@
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: space-evenly;
+        padding-left: 50px;
+        padding-right: 50px;
       }
       .showtime{
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
+        /* display: flex;
+        flex-direction: column; */
+        /* justify-content: center;
         align-items: center;
         font-size: 15px;
-        border-radius: 15%;
-        border: 1px solid black;
+        border: 1px solid black; */
       }
       .body{
         padding: 5%;
@@ -31,7 +35,7 @@
         margin: 10px;
       }
       .card{
-        margin-top: 20px;
+        margin: 20px 20px 20px 0px ;
       }
     </style>
   </head>
@@ -64,7 +68,7 @@
       </div>
     </nav>
 <div>
-      {% if not movieInfos %}
+      {% if False %}
       <div class="jumbotron">
         <h1 class="display-4">There are no showtimes for this movie.</h1>
         <hr class="my-4">
@@ -74,15 +78,25 @@
       <h4 class="display-4 heading"> Nearby Showtimes for <strong> {{selected_movie}}</strong> </h4>
 
       <div class="showtimes">
-          {% for showtime in movieInfos[0].showtimes %}
-
-          <div class="card">
+          {% for theatre,showtimes in showtime_dict.items() %}
+          <div class="card showtime col-lg-6">
             <div class="card-body">
-              <h5 class="card-title">Theatre: {{showtime.theatre.name}}</h5>
-              <p class="card-text">Date: {{showtime.dateTime}}</p>
-              {% if showtime.ticketURI %}
-                <a href={{showtime.ticketURI}} class="btn btn-primary">Buy tickets</a>
-              {% endif %}
+              <h5 class="card-title">Theatre: {{theatre}}</h5>
+
+              <div class="dropdown show">
+                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  See specific times
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                  {% for showtime in showtimes %}
+                  {% if showtime.ticketURI: %}
+                  <a class="dropdown-item" href="{{showtime.ticketURI}}">{{showtime.dateTime}}</a>
+                  {% else %}
+                  <a class="dropdown-item">{{showtime.dateTime}}</a>
+                  {% endif %}
+                  {% endfor %}
+                </div>
+              </div>
             </div>
           </div>
         {% endfor %}
