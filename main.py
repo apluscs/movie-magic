@@ -255,6 +255,15 @@ class VerifyPage(webapp2.RequestHandler):
         verifyTemplate=jinjaEnv.get_template('verify.html')   #gets that html File
         self.response.write(verifyTemplate.render(references))
 
+class InfoPage(webapp2.RequestHandler):
+    def post(self):
+        id = self.request.get("id")
+        api_url = "https://api.themoviedb.org/3/movie/" + id + "?api_key=e2648a8f2ae94cef44c1fcfbf7a0f461"
+        TMDB_response_json = urlfetch.fetch(api_url).content
+        TMDB_response_raw = json.loads(TMDB_response_json)
+        print(TMDB_response_raw)
+        infoTemplate=jinjaEnv.get_template('movieInfoPage.html')   #gets that html File
+        self.response.write(infoTemplate.render(references))
 
 
 
@@ -266,6 +275,7 @@ app=webapp2.WSGIApplication(
         ('/register',RegisterPage),
         ('/movie-results',MovieResultPage),
         ('/shows-results',ShowsResultPage),
+        ('/info', InfoPage),
         ('/verify', VerifyPage)
     ],
     debug=True    #parameter 1
