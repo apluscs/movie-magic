@@ -6,7 +6,6 @@ from google.appengine.ext import ndb
 import json
 import datetime
 
-
 class SiteUser(ndb.Model):
     first_name=ndb.StringProperty()
     email=ndb.StringProperty()
@@ -151,6 +150,8 @@ class ResultsPage(webapp2.RequestHandler):
                     TMDB_response_raw = json.loads(TMDB_response_json)
                     print(TMDB_response_raw)
                     movies = {}
+                    if TMDB_response_raw['total_results'] == 0:
+                        continue
                     movies["title"] = TMDB_response_raw['results'][0]['name']
                     movies["id"] = TMDB_response_raw["results"][0]['id']
                     movies["poster"] = "http://image.tmdb.org/t/p/w185" + TMDB_response_raw["results"][0]['poster_path']
@@ -195,6 +196,8 @@ class ResultsPage(webapp2.RequestHandler):
                     TMDB_response_json = urlfetch.fetch(api_url).content
                     TMDB_response_raw = json.loads(TMDB_response_json)
                     movies = {}
+                    if TMDB_response_raw['total_results'] == 0:
+                        continue
                     movies["title"] = TMDB_response_raw["results"][0]['title']
                     movies["id"] = TMDB_response_raw["results"][0]['id']
                     movies["poster"] = "http://image.tmdb.org/t/p/w185" + TMDB_response_raw["results"][0]['poster_path']
