@@ -6,6 +6,7 @@ from google.appengine.ext import ndb
 import json
 import datetime
 
+
 class SiteUser(ndb.Model):
     first_name=ndb.StringProperty()
     email=ndb.StringProperty()
@@ -121,58 +122,138 @@ class ResultsPage(webapp2.RequestHandler):
         pass
     def post(self):
         #Receives the search from the form on index.html
+        # searchDict = self.request.get("searchBar")
+        date = self.request.get("date")
+        searchTerm = self.request.get("id")
+        searchTitle = self.request.get("title")
+        searchImg = self.request.get("poster")
+        if (date < "2019"): #Use Tastedive for recommendations
+            q = searchTitle.replace(" ","+")
+            tastedivekey = "341009-MovieMag-4Y8KEEUH"
+            api_url = "https://tastedive.com/api/similar?q=" + q +"&k=" + tastedivekey
+            tastedive_response_json = urlfetch.fetch(api_url).content
+            tastedive_response_raw = json.loads(tastedive_response_json)
+            tasteDiveRecommendationList = []
+            for results in tastedive_response_raw['Similar']['Results'][0:50]:
+                tasteDiveRecommendationList.append(results["Name"])
+            recommendationList = []
+            for item in tasteDiveRecommendationList:
+                q = item.replace(" ", "+")
+                TMDBkey = "e2648a8f2ae94cef44c1fcfbf7a0f461"
+                api_url = "https://api.themoviedb.org/3/search/movie?api_key=" + TMDBkey +"&query=" + q
+                TMDB_response_json = urlfetch.fetch(api_url).content
+                TMDB_response_raw = json.loads(TMDB_response_json)
+                movies = {}
+                movies["title"] = TMDB_response_raw["results"][0]['title']
+                movies["id"] = TMDB_response_raw["results"][0]['id']
+                movies["poster"] = "http://image.tmdb.org/t/p/w185" + TMDB_response_raw["results"][0]['poster_path']
+                recommendationList.append(movies)
+            print("tastedive")
+        #Makes the searchTerm into a url compatable string
+        # q = searchTerm.replace(" ","+")
+        #Make the tastedivekey and use the URL to retrieve data from the tastedive API
+        else:
+            TMDBkey = "e2648a8f2ae94cef44c1fcfbf7a0f461"
+            api_url = "https://api.themoviedb.org/3/movie/" + searchTerm + "/similar?api_key=" + TMDBkey
+            TMDB_response_json = urlfetch.fetch(api_url).content
+            TMDB_response_raw = json.loads(TMDB_response_json)
+            recommendationList = []
+
+            for item in TMDB_response_raw["results"]:
+                if item['poster_path'] == None:
+                    continue
+                title = item['title']
+                photo = item['poster_path']
+                id = item['id']
+                photoURL = "http://image.tmdb.org/t/p/w185" + photo
+                movieDict = {}
+                movieDict["title"] = title
+                movieDict["poster"] = photoURL
+                movieDict["id"] = id
+                recommendationList.append(movieDict)
+            print("TMDB")
+        references = {
+            "recomendations" : recommendationList,
+            'searched' : searchTitle,
+            'searchImg' : searchImg
+         }
+        resultsTemplate=jinjaEnv.get_template('results.html')   #gets that html File
+        self.response.write(resultsTemplate.render(references))
+        # print(recommendationList)
+        # for results in TMDB_response_raw['Similar']['Results'][0:50]:
+        #     recommendationList.append(results["Name"])
+        # titleAndPic = {}
+        # urls = []
+        # #For every item that was recommended by tastedive, we extract all the information from the OMDB database
+        # for item in recommendationList:
+        #     searchTitle = item.replace(" ", "+")
+        #     #Making the call to the OMDB Api with the correct key and then formatting with json
+        #     OMDBkey = "564669e8"
+        #     OMDBurl = "http://www.omdbapi.com/?t=" + searchTitle + "&apikey=" + OMDBkey
+        #     OMDB_response_json = urlfetch.fetch(OMDBurl).content
+        #     OMDB_response_raw = json.loads(OMDB_response_json)
+        #     posterKey = unicode("Poster")
+        #     # print(OMDB_response_raw[key])
+        #     #This function searches through the return from the OMDB database which includes names, dates, titles, genres
+        #     #And only extracts the poster image
+        #     for key in OMDB_response_raw:
+        #         if key == posterKey:
+        #             link = OMDB_response_raw[key]
+        #             urls.append(link)
+        #             titleAndPic[item] = link
+        # #Search through the OMDB database for an image for the specific item that was actually search for
+        # OMDBurl = "http://www.omdbapi.com/?t=" + q + "&apikey=" + OMDBkey
+        # # print(OMDBurl)
+        # OMDB_response_json = urlfetch.fetch(OMDBurl).content
+        # OMDB_response_raw = json.loads(OMDB_response_json)
+        # #Retrieve the image out of the returned json database
+        # posterKey = unicode("Poster")
+        # for key in OMDB_response_raw:
+        #     if key == posterKey:
+        #         searchImg = OMDB_response_raw[key]
+        # references = {
+        #     "recomendations" : recommendationList,
+        #     "link" : urls,
+        #     "movieAndPoster" : titleAndPic,
+        #     'searched' : searchTerm,
+        #     'searchImg' : searchImg
+        # }
+        # checkLogIn(references)
+        # resultsTemplate=jinjaEnv.get_template('results.html')   #gets that html File
+        # self.response.write(resultsTemplate.render(references))
+
+class VerifyPage(webapp2.RequestHandler):
+    def post(self):
         searchTerm = self.request.get("searchBar")
         #Makes the searchTerm into a url compatable string
         q = searchTerm.replace(" ","+")
-        #Make the tastedivekey and use the URL to retrieve data from the tastedive API
-        tastedivekey = "341009-MovieMag-4Y8KEEUH"
-        api_url = "https://tastedive.com/api/similar?q=" + q +"&k=" + tastedivekey
-        tastedive_response_json = urlfetch.fetch(api_url).content
-        tastedive_response_raw = json.loads(tastedive_response_json)
-
-        recommendationList = []
-        # print(recommendationList)
-        for results in tastedive_response_raw['Similar']['Results'][0:50]:
-            recommendationList.append(results["Name"])
-        titleAndPic = {}
-        urls = []
-        #For every item that was recommended by tastedive, we extract all the information from the OMDB database
-        for item in recommendationList:
-            searchTitle = item.replace(" ", "+")
-            #Making the call to the OMDB Api with the correct key and then formatting with json
-            OMDBkey = "564669e8"
-            OMDBurl = "http://www.omdbapi.com/?t=" + searchTitle + "&apikey=" + OMDBkey
-            OMDB_response_json = urlfetch.fetch(OMDBurl).content
-            OMDB_response_raw = json.loads(OMDB_response_json)
-            posterKey = unicode("Poster")
-            # print(OMDB_response_raw[key])
-            #This function searches through the return from the OMDB database which includes names, dates, titles, genres
-            #And only extracts the poster image
-            for key in OMDB_response_raw:
-                if key == posterKey:
-                    link = OMDB_response_raw[key]
-                    urls.append(link)
-                    titleAndPic[item] = link
-        #Search through the OMDB database for an image for the specific item that was actually search for
-        OMDBurl = "http://www.omdbapi.com/?t=" + q + "&apikey=" + OMDBkey
-        # print(OMDBurl)
-        OMDB_response_json = urlfetch.fetch(OMDBurl).content
-        OMDB_response_raw = json.loads(OMDB_response_json)
-        #Retrieve the image out of the returned json database
-        posterKey = unicode("Poster")
-        for key in OMDB_response_raw:
-            if key == posterKey:
-                searchImg = OMDB_response_raw[key]
+        TMDBkey = "e2648a8f2ae94cef44c1fcfbf7a0f461"
+        api_url = "https://api.themoviedb.org/3/search/movie?api_key=" + TMDBkey +"&query=" + q
+        TMDB_response_json = urlfetch.fetch(api_url).content
+        TMDB_response_raw = json.loads(TMDB_response_json)
+        possibleMovies = []
+        for item in TMDB_response_raw["results"]:
+            if item['poster_path'] == None:
+                continue
+            title = item['title']
+            photo = item['poster_path']
+            id = item['id']
+            date = item['release_date']
+            photoURL = "http://image.tmdb.org/t/p/w185" + photo
+            movieDict = {}
+            movieDict["title"] = title
+            movieDict["poster"] = photoURL
+            movieDict["id"] = id
+            movieDict["date"] = date
+            possibleMovies.append(movieDict)
         references = {
-            "recomendations" : recommendationList,
-            "link" : urls,
-            "movieAndPoster" : titleAndPic,
-            'searched' : searchTerm,
-            'searchImg' : searchImg
+            "possibleMovies" : possibleMovies
         }
-        checkLogIn(references)
-        resultsTemplate=jinjaEnv.get_template('results.html')   #gets that html File
-        self.response.write(resultsTemplate.render(references))
+        verifyTemplate=jinjaEnv.get_template('verify.html')   #gets that html File
+        self.response.write(verifyTemplate.render(references))
+
+
+
 
 app=webapp2.WSGIApplication(
     [
@@ -182,6 +263,7 @@ app=webapp2.WSGIApplication(
         ('/register',RegisterPage),
         ('/movie-results',MovieResultPage),
         ('/shows-results',ShowsResultPage),
+        ('/verify', VerifyPage)
     ],
     debug=True    #parameter 1
 )
