@@ -4,25 +4,41 @@
 <head>
   <meta charset="utf-8">
   <link rel="stylesheet" href="CSS/results.css">
-  <title></title>
+  <title>Recommended Movies</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="CSS/getLocation.css">
 </head>
 
 <body>
-  <form class='searching' action="/results" method='post' autocomplete="off">
-    <input id="searchBar" type="text" name="searchBar" placeholder="What Movies do you enjoy?">
-  </form>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+          <a {{hideLogIn}} class="btn btn-light" href='/login' role="button">Login</a>
+        </li>
+        <li>
+          <a {{hideLogOut}} class="btn btn-secondary" href={{logout_url}} role="button">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <br><br>
   <div class="searchedItem">
     <h1 id='srcTxt'>You searched for: {{searched}} </h1>
     <img id="srcImg" height="600px" width='400px' src='{{searchImg}}' />
   </div>
+  <h1>Similar movies: </h1>
   <div class="results">
-    <!-- This is the old method for images linking to a new page -->
-    <!-- {% for item in movieAndPoster %}
-      <div class="resultsDisplay">
-        <h4> {{item}} </h4>
-        <a href="/movie-results"><img height="300px" width="200px" src="{{movieAndPoster[item]}}"></img></a>
-      </div>
-      {% endfor %} -->
+
     <!-- This makes each image a form and submits the title as a part of the form -->
     {% for item in movieAndPoster %}
     <form class="resultsDisplay" action="/movie-results" method="post">
