@@ -47,6 +47,13 @@
             <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
           </li>
         </ul>
+        <nav class="navbar navbar-light bg-light bar">
+          <form action = "/results" method = 'post' class="form-inline">
+            <input name="searchBar" class="form-control mr-sm-2" type="search" placeholder="Search for another movie" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+          </form>
+        </nav>
+
         <ul class="nav navbar-nav navbar-right">
           <li>
             <a {{hideLogIn}} class="btn btn-light" href='/login' role="button">Login</a>
@@ -57,7 +64,7 @@
         </ul>
       </div>
     </nav>
-    <div>
+<div>
       {% if not movieInfos %}
       <div class="jumbotron">
         <h1 class="display-4">There are no showtimes for this movie.</h1>
@@ -65,12 +72,9 @@
         <button onclick="goBack()" class="btn btn-primary">Choose a different movie</button>
       </div>
       {%else%}
-      <h4 class="display-4 heading"> Nearby Showtimes for {{selected_movie}} </h4>
+      <h4 class="display-4 heading"> Nearby Showtimes for <strong> {{selected_movie}}</strong> </h4>
 
       <div class="showtimes">
-
-
-
           {% for showtime in movieInfos[0].showtimes %}
 
           <div class="card">
@@ -82,9 +86,6 @@
               {% endif %}
             </div>
           </div>
-
-
-
         {% endfor %}
           </div>
           {% endif %}
