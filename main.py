@@ -38,6 +38,7 @@ class LoginPage(webapp2.RequestHandler):
             self.redirect("/register")   #send to register
     def get(self):
         user=users.get_current_user()
+
         logout_url=users.create_logout_url('/') #redirect to this link
         if user:    #someone is already logged in to gmail
             self.checkExistingUser(logout_url)

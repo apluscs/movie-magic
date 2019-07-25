@@ -14,13 +14,19 @@
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-
+<nav class="navbar navbar-light bg-light">
+  <form action = "/results" method = 'post' class="form-inline">
+    <input name="searchBar" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+  </form>
+</nav>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
           <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
         </li>
       </ul>
+
       <ul class="nav navbar-nav navbar-right">
         <li>
           <a {{hideLogIn}} class="btn btn-light" href='/login' role="button">Login</a>
@@ -36,7 +42,9 @@
     <h1 id='srcTxt'>You searched for: {{searched}} </h1>
     <img id="srcImg" height="600px" width='400px' src='{{searchImg}}' />
   </div>
+  <br><br>
   <h1>Similar movies: </h1>
+  <br><br>
   <div class="results">
 
     <!-- This makes each image a form and submits the title as a part of the form -->
