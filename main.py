@@ -105,11 +105,17 @@ class MovieResultPage(webapp2.RequestHandler):
         movie_result_template=jinjaEnv.get_template('movie-result.html')
         self.response.write(movie_result_template.render(movie_result_dict))
     def post(self): #post from clicking movie on ResultsPage
+        id = self.request.get("id")
+        api_url = "https://api.themoviedb.org/3/movie/" + id + "?api_key=e2648a8f2ae94cef44c1fcfbf7a0f461"
+        TMDB_response_json = urlfetch.fetch(api_url).content
+        TMDB_response_raw = json.loads(TMDB_response_json)
+        print(TMDB_response_raw)
         movie_title=self.request.get('movie_title') #form on getLocation.html is not sending this
         # movie_title=movie_title.replace(' ','_')
         user=users.get_current_user()
         get_location_dict={
-            "movie_title":movie_title
+            "movie_title":movie_title,
+            "movie_info" : TMDB_response_raw
         }
         logout_url=users.create_logout_url('/')
         if user:    #someone logged into Google = only show logout feature
@@ -256,14 +262,8 @@ class VerifyPage(webapp2.RequestHandler):
         self.response.write(verifyTemplate.render(references))
 
 class InfoPage(webapp2.RequestHandler):
-    def post(self):
-        id = self.request.get("id")
-        api_url = "https://api.themoviedb.org/3/movie/" + id + "?api_key=e2648a8f2ae94cef44c1fcfbf7a0f461"
-        TMDB_response_json = urlfetch.fetch(api_url).content
-        TMDB_response_raw = json.loads(TMDB_response_json)
-        print(TMDB_response_raw)
-        infoTemplate=jinjaEnv.get_template('movieInfoPage.html')   #gets that html File
-        self.response.write(infoTemplate.render(references))
+    pass
+
 
 
 
