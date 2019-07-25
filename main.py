@@ -262,6 +262,7 @@ class VerifyPage(webapp2.RequestHandler):
         self.response.write(verifyTemplate.render(references))
 
 class InfoPage(webapp2.RequestHandler):
+
     pass
 
 
