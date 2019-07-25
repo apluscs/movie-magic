@@ -3,11 +3,43 @@
   <head>
     <meta charset="utf-8">
     <title>All About {{selected_movie}}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+      .jumbotron{
+        margin: 10% 20% auto 20%;
+      }
+    </style>
   </head>
   <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+          </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            <a {{hideLogIn}} class="btn btn-light" href='/login' role="button">Login</a>
+          </li>
+          <li>
+            <a {{hideLogOut}} class="btn btn-secondary" href={{logout_url}} role="button">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    
     <div>
         {% if not movieInfos: %}
-        <h1>There are no showtimes for this movie</h1>
+        <div class="jumbotron">
+          <h1 class="display-4">There are no showtimes for this movie.</h1>
+          <hr class="my-4">
+          <button onclick="goBack()" class="btn btn-primary">Choose a different movie</button>
+        </div>
         {% endif %}
         {% for movie in movieInfos %}
         <div class="movie-info">
@@ -22,5 +54,11 @@
         </div>
         {% endfor %}
     </div>
+
+    <script>
+      function goBack() { //goes back without actually reloading the page :D
+        window.history.go(-2);
+      }
+    </script>
   </body>
 </html>

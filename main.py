@@ -73,29 +73,20 @@ class RegisterPage(webapp2.RequestHandler):
         afterRegister_template=jinjaEnv.get_template('afterRegister.html')
         self.response.write(afterRegister_template.render(afterRegister_dict))
 
-class ShowsResultPage(webapp2.RequestHandler):  #add a theatre radius parameter
+class ShowsResultPage(webapp2.RequestHandler):
     def get(self):
         pass
 
 class MovieResultPage(webapp2.RequestHandler):
-    def post(self):
+    def get(self):  #from getLocation.html
         user=users.get_current_user()
-
         movie_title=self.request.get('movie_title')
-        zip_code=""
-        # print(movie_title)
-        if not user:
-            self.redirect("/login")  #send to login to Google
-            return
-        email_address=user.nickname()   #username
-        existing_user=SiteUser.query().filter(SiteUser.email== email_address).get()
-        if not existing_user:
-            self.redirect("/login")  #send to login to register
-            return
-        zip_code="48098"#existing_user.zip_code, will replace after validation step
-
+        zip_code=48098#self.request.get('zip_code')
+        radius=self.request.get('mile_options')
         date=datetime.datetime.now().strftime("%Y-%m-%d")
-        api_url="http://data.tmsapi.com/v1.1/movies/showings?startDate=%s&zip=%s&api_key=f5ty9m8fjg5hbwby658ccc75" % (date, zip_code)
+
+        api_url="http://data.tmsapi.com/v1.1/movies/showings?startDate=%s&zip=%s&api_key=uy9kumz6mrh8dp5xp4zvtzd9" % (date, zip_code)
+        print(api_url)
         gracenote_response_json = urlfetch.fetch(api_url).content
         gracenote_response_raw = json.loads(gracenote_response_json)
         showed_movies=[]
@@ -109,6 +100,15 @@ class MovieResultPage(webapp2.RequestHandler):
         }
         movie_result_template=jinjaEnv.get_template('movie-result.html')
         self.response.write(movie_result_template.render(movie_result_dict))
+    def post(self): #post from clicking movie on ResultsPage
+        movie_title=self.request.get('movie_title') #form on getLocation.html is not sending this
+        # movie_title=movie_title.replace(' ','_')
+
+        get_location_dict={
+            "movie_title":movie_title
+        }
+        get_location_template=jinjaEnv.get_template('getLocation.html')
+        self.response.write(get_location_template.render(get_location_dict))
 
 class GetLocationPage(webapp2.RequestHandler):
     def get(self):
@@ -179,7 +179,6 @@ app=webapp2.WSGIApplication(
         ('/register',RegisterPage),
         ('/movie-results',MovieResultPage),
         ('/shows-results',ShowsResultPage),
-        ('/get-location',GetLocationPage)
     ],
     debug=True    #parameter 1
 )

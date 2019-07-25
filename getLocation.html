@@ -3,14 +3,61 @@
   <head>
     <meta charset="utf-8">
     <title></title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="CSS/getLocation.css">
   </head>
   <body>
-    <h1>Please fill out this form to get showtimes for the [selected movie]</h1>
-    <form class="" action="index.html" method="post">
-      <h5>Please enter your zip code.</h5>
-      <input type="text" name="zip_code" value="" placeholder="Zip code">
-      <h5>How far of theater are you looking for?</h5>
-      <input type="text" name="radius" value="Enter">
-    </form>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+          </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            <a {{hideLogIn}} class="btn btn-light" href='/login' role="button">Login</a>
+          </li>
+          <li>
+            <a {{hideLogOut}} class="btn btn-secondary" href={{logout_url}} role="button">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    
+    <div class="jumbotron">
+      <h1 class="display-6">Please fill out this form to get showtimes for <strong>{{movie_title}}</strong>.</h1>
+      <hr class="my-4">
+      <form class="" action="/movie-results" method="get">
+        <div class="form-group">
+          <h5>Please enter your zip code.</h5>
+          <input type="text" name="zip_code" value="" placeholder="Zip code">
+          <br>
+        </div>
+        <!--
+        <h5>How far are you willing to drive to see [this movie]?</h5>
+        <input type="text" name="radius" value="" placeholder=""> -->
+        <div class="form-group">
+          <h5 for="mile-options">How many miles are you willing to drive to see <strong>{{movie_title}}</strong>?</h5>
+          <select class="form-control col-lg-3" id="mile-options" name="mile_options">
+            {% for i in range(1,16,2) %}
+            <option>{{i}}</option>
+            {%endfor%}
+            {% for i in range(20,101,5) %}
+            <option>{{i}}</option>
+            {%endfor%}
+          </select>
+          <input hidden name="movie_title" value="{{movie_title}}"/>
+        </div>
+         <button type="submit" class="btn btn-primary">Submit</button>
+       </form>
+
+    </div>
+    <h1></h1>
+
   </body>
 </html>
