@@ -170,18 +170,19 @@ class ResultsPage(webapp2.RequestHandler):
                 for results in tastedive_response_raw['Similar']['Results'][0:50]:
                     tasteDiveRecommendationList.append(results["Name"])
                 recommendationList = []
+                print(tasteDiveRecommendationList)
                 for item in tasteDiveRecommendationList:
                     q = item.replace(" ", "+")
                     TMDBkey = "e2648a8f2ae94cef44c1fcfbf7a0f461"
                     api_url = "https://api.themoviedb.org/3/search/tv?api_key=" + TMDBkey +"&query=" + q
                     TMDB_response_json = urlfetch.fetch(api_url).content
                     TMDB_response_raw = json.loads(TMDB_response_json)
+                    print(TMDB_response_raw)
                     movies = {}
-                    movies["title"] = TMDB_response_raw["results"][0]['name']
+                    movies["title"] = TMDB_response_raw['results'][0]['name']
                     movies["id"] = TMDB_response_raw["results"][0]['id']
                     movies["poster"] = "http://image.tmdb.org/t/p/w185" + TMDB_response_raw["results"][0]['poster_path']
                     recommendationList.append(movies)
-                print("tastedive")
                 #Makes the searchTerm into a url compatable string
                 # q = searchTerm.replace(" ","+")
                 #Make the tastedivekey and use the URL to retrieve data from the tastedive API
