@@ -79,7 +79,7 @@ body{
     content: "TV";
     padding-left: 10px;
 
-    background-color: #349AC2; color: #FFFFFF;
+    background-color: #28a745; color: #FFFFFF;
 }
 .onoffswitch-inner:after {
     content: "MOVIE";
