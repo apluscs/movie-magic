@@ -126,30 +126,65 @@ class MovieResultPage(webapp2.RequestHandler):
         # print(dict.items())
         return dict
     def post(self): #post from clicking movie on ResultsPage
-        id = self.request.get("id")
-        api_url = "https://api.themoviedb.org/3/movie/" + id + "?api_key=e2648a8f2ae94cef44c1fcfbf7a0f461"
-        TMDB_response_json = urlfetch.fetch(api_url).content
-        TMDB_response_raw = json.loads(TMDB_response_json)
-        print(TMDB_response_raw)
-        movie_title=self.request.get('movie_title') #form on getLocation.html is not sending this
-        # movie_title=movie_title.replace(' ','_')
-        user=users.get_current_user()
-        genre = []
-        for item in TMDB_response_raw['genres']:
-            name = item['name']
-            genre.append(name)
-        get_location_dict={
-            "movie_title":movie_title,
-            "movie_info" : TMDB_response_raw,
-            'name' : TMDB_response_raw['original_title'],
-            'overview': TMDB_response_raw['overview'],
-            'poster' : "http://image.tmdb.org/t/p/w185" + TMDB_response_raw['poster_path'],
-            'genre' : genre,
-            'runtime' : TMDB_response_raw['runtime'],
-            'release_date' : TMDB_response_raw['release_date']
+        type = self.request.get("type")
+        if type == 'TV':
+            id = self.request.get("id")
+            api_url = "https://api.themoviedb.org/3/tv/" + id + "?api_key=e2648a8f2ae94cef44c1fcfbf7a0f461"
+            TMDB_response_json = urlfetch.fetch(api_url).content
+            TMDB_response_raw = json.loads(TMDB_response_json)
+            print('***********')
+            print(api_url)
+                # user=users.get_current_user()
+            genre = []
+            creators = []
+            runtime = TMDB_response_raw['episode_run_time'][0]
+            # print(str(type(runtime)))
+            for item in TMDB_response_raw['genres']:
+                name = item['name']
+                genre.append(name)
 
-        }
+            for item in TMDB_response_raw['created_by']:
+                name = item['name']
+                creators.append(name)
+            get_location_dict={
+                'type' : 'TV',
+                'name' : TMDB_response_raw['original_name'],
+                'overview': TMDB_response_raw['overview'],
+                'creators' : creators,
+                'runtime' : str(TMDB_response_raw['episode_run_time']),
+                'poster' : "http://image.tmdb.org/t/p/w185" + TMDB_response_raw['poster_path'],
+                'genre' : genre,
+                'rating' : TMDB_response_raw['vote_average'],
+                'seasons' : TMDB_response_raw['number_of_seasons'],
+                'runtime' : runtime
+            }
+        else:
+            id = self.request.get("id")
+            api_url = "https://api.themoviedb.org/3/movie/" + id + "?api_key=e2648a8f2ae94cef44c1fcfbf7a0f461"
+            TMDB_response_json = urlfetch.fetch(api_url).content
+            TMDB_response_raw = json.loads(TMDB_response_json)
+            print(TMDB_response_raw)
+            movie_title=self.request.get('movie_title') #form on getLocation.html is not sending this
+            # movie_title=movie_title.replace(' ','_')
+            user=users.get_current_user()
+            genre = []
+            for item in TMDB_response_raw['genres']:
+                name = item['name']
+                genre.append(name)
+            get_location_dict={
+                'type' : 'Movie',
+                "movie_title":movie_title,
+                "movie_info" : TMDB_response_raw,
+                'name' : TMDB_response_raw['original_title'],
+                'overview': TMDB_response_raw['overview'],
+                'poster' : "http://image.tmdb.org/t/p/w185" + TMDB_response_raw['poster_path'],
+                'genre' : genre,
+                'runtime' : TMDB_response_raw['runtime'],
+                'release_date' : TMDB_response_raw['release_date']
 
+            }
+        print(get_location_dict)
+        print(type)
         checkLogIn(get_location_dict)
         get_location_template=jinjaEnv.get_template('getLocation.html')
         self.response.write(get_location_template.render(get_location_dict))
@@ -231,8 +266,8 @@ class ResultsPage(webapp2.RequestHandler):
                     TMDB_response_json = urlfetch.fetch(api_url).content
                     TMDB_response_raw = json.loads(TMDB_response_json)
                     movies = {}
-                    if TMDB_response_raw['total_results'] == 0:
-                        continue
+                    # if TMDB_response_raw['total_results'] == 0:
+                    #     continue
                     movies["title"] = TMDB_response_raw["results"][0]['title']
                     movies["id"] = TMDB_response_raw["results"][0]['id']
                     movies["poster"] = "http://image.tmdb.org/t/p/w185" + TMDB_response_raw["results"][0]['poster_path']
