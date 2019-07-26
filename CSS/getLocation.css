@@ -12,6 +12,16 @@ body{
 
 .imgResult{
   float: left;
+  padding: 15px;
+  align-content: top;
+}
+.info{
+  color: white;
+  font-size: 20px
+}
+div.info{
+  height: 400px;
+  width: auto;
 }
 .subtitle{
     font-family: 'Cinzel', serif;
