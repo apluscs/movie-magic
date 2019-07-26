@@ -20,8 +20,9 @@ body{
   font-size: 20px
 }
 div.info{
-  height: 400px;
-  width: auto;
+  height: 500px;
+  margin-left: 20%;
+  margin-right: 20%;
 }
 .subtitle{
     font-family: 'Cinzel', serif;
@@ -30,5 +31,17 @@ div.info{
 }
 .subsubtitle{
     font-family: 'Cinzel', serif;
-    
+
+}
+.tv{
+  font-family: 'Cinzel', serif;
+  font-weight: 400;
+}
+.movie{
+  font-family: 'Cinzel', serif;
+  font-weight: 400;
+}
+#title{
+  font-family: 'Cinzel', serif;
+  font-weight: 550;
 }

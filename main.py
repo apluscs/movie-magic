@@ -181,7 +181,8 @@ class MovieResultPage(webapp2.RequestHandler):
                 'poster' : "http://image.tmdb.org/t/p/w185" + TMDB_response_raw['poster_path'],
                 'genre' : genre,
                 'runtime' : TMDB_response_raw['runtime'],
-                'release_date' : TMDB_response_raw['release_date']
+                'release_date' : TMDB_response_raw['release_date'],
+                'rating' : TMDB_response_raw['vote_average']
 
             }
         print(get_location_dict)
