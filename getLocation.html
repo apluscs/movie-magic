@@ -68,10 +68,18 @@
           <input hidden name="movie_title" value="{{movie_title}}"/>
         </div>
          <button type="submit" class="btn btn-primary">Submit</button>
+         <hr class="my-4">
+         <div class="d-flex flex-row">
+           <h4 class="display-6 col-lg-2">Or...</strong></h4>
+           <button onclick="goBack()" class="btn btn-primary">Choose a different movie</button>
+         </div>
        </form>
-
     </div>
-
-
+       <br><br><br>
+    <script>
+      function goBack() { //goes back without actually reloading the page :D
+        window.history.go(-1);
+      }
+    </script>
   </body>
 </html>
