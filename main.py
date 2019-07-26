@@ -365,7 +365,6 @@ app=webapp2.WSGIApplication(
         ('/',MainPage), #tuple
         ('/login',LoginPage),
         ('/results', ResultsPage),
-        ('/register',RegisterPage),
         ('/movie-results',MovieResultPage),
         ('/shows-results',ShowsResultPage),
         ('/verify', VerifyPage),
