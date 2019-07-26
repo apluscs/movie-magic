@@ -23,3 +23,12 @@ div.info{
   height: 400px;
   width: auto;
 }
+.subtitle{
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+
+}
+.subsubtitle{
+    font-family: 'Cinzel', serif;
+    
+}

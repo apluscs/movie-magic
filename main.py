@@ -10,6 +10,7 @@ class SiteUser(ndb.Model):
     first_name=ndb.StringProperty()
     email=ndb.StringProperty()
     zip_code=ndb.StringProperty()
+    watchedMovies = ndb.StringProperty(repeated = True)
 
 
 def checkLogIn(template):
@@ -105,12 +106,12 @@ class MovieResultPage(webapp2.RequestHandler):
             "selected_movie": movie_title
         }
         checkLogIn(movie_result_dict)
-
+        # print(showtime_dict)
         movie_result_template=jinjaEnv.get_template('movie-result.html')
         self.response.write(movie_result_template.render(movie_result_dict))
     def groupByTheatre(self,showed_movie):   #return array of Theatres
-        if not showed_movie["showtimes"]:
-            return
+        if "showtimes" not in showed_movie:
+            return {}
         showtimes=showed_movie["showtimes"]
         dict={} #each theatre has many showtimes
         for showtime in showtimes:
@@ -204,7 +205,7 @@ class ResultsPage(webapp2.RequestHandler):
             if (date < "2019"): #Use Tastedive for recommendations
                 q = searchTitle.replace(" ","+")
                 tastedivekey = "341009-MovieMag-4Y8KEEUH"
-                api_url = "https://tastedive.com/api/similar?q=" + q +"&k=" + tastedivekey
+                api_url = "https://tastedive.com/api/similar?q=" + q +"&k=" + tastedivekey + "&limit=100"
                 tastedive_response_json = urlfetch.fetch(api_url).content
                 tastedive_response_raw = json.loads(tastedive_response_json)
                 tasteDiveRecommendationList = []

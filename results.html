@@ -6,6 +6,7 @@
   <link rel="stylesheet" href="CSS/results.css">
   <title>Recommended</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css?family=Cinzel:400,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="CSS/getLocation.css">
 </head>
 
@@ -39,19 +40,18 @@
   </nav>
   <br><br>
   <div class="searchedItem">
-    <h1 id='srcTxt'>You searched for: {{searched}} </h1>
+    <h1 id='srcTxt' class="subtitle">You searched for: {{searched}} </h1>
     <img id="srcImg" height="600px" width='400px' src='{{searchImg}}' />
   </div>
   <br><br>
-  <h1>Similar items: </h1>
-  <br><br>
+  <h1 class="subtitle">Similar items: </h1>
   <div class="results">
 
     <!-- This makes each image a form and submits the title as a part of the form -->
     {% for item in recomendations %}
     <form class="resultsDisplay oneResult" action="/movie-results" method="post">
       <div class="resultsDisplay">
-        <h4> {{item["title"]}} </h4>
+        <h4 class="subsubtitle"> {{item["title"]}} </h4>
         <input type="hidden" name="movie_title" value="{{item["title"]}}">
         <input type="hidden" name="id" value="{{item["id"]}}">
         <input type="hidden" name="movieInfo" value="{{item}}">

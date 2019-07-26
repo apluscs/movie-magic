@@ -70,25 +70,31 @@
         <input type="text" name="zip_code" value="" placeholder="Zip code">
         <br>
       </div>
-
-      <div class="form-group">
-        <h5 for="mile-options">How many miles are you willing to drive to see <strong>{{movie_title}}</strong>?</h5>
-        <select class="form-control col-lg-3" id="mile-options" name="mile_options">
-          {% for i in range(5,16,2) %}
-          <option>{{i}}</option>
-          {%endfor%}
-          {% for i in range(20,101,5) %}
-          <option>{{i}}</option>
-          {%endfor%}
-        </select>
-        <input hidden name="movie_title" value="{{movie_title}}" />
-      </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-
-  </div>
-
-
-</body>
-
+        <div class="form-group">
+          <h5 for="mile-options">How many miles are you willing to drive to see <strong>{{movie_title}}</strong>?</h5>
+          <select class="form-control col-lg-3" id="mile-options" name="mile_options">
+            {% for i in range(5,16,2) %}
+            <option>{{i}}</option>
+            {%endfor%}
+            {% for i in range(20,101,5) %}
+            <option>{{i}}</option>
+            {%endfor%}
+          </select>
+          <input hidden name="movie_title" value="{{movie_title}}"/>
+        </div>
+         <button type="submit" class="btn btn-primary">Submit</button>
+         <hr class="my-4">
+         <div class="d-flex flex-row">
+           <h4 class="display-6 col-lg-2">Or...</strong></h4>
+           <button onclick="goBack()" class="btn btn-primary">Choose a different movie</button>
+         </div>
+       </form>
+    </div>
+       <br><br><br>
+    <script>
+      function goBack() { //goes back without actually reloading the page :D
+        window.history.go(-1);
+      }
+    </script>
+  </body>
 </html>
