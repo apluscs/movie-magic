@@ -2,15 +2,11 @@ import webapp2
 import jinja2
 import os
 from google.appengine.api import urlfetch, users
-from google.appengine.ext import ndb
+
 import json
 import datetime
+from models import SiteUser
 
-class SiteUser(ndb.Model):
-    first_name=ndb.StringProperty()
-    email=ndb.StringProperty()
-    zip_code=ndb.StringProperty()
-    watchedMovies = ndb.StringProperty(repeated = True)
 
 
 def checkLogIn(template):
@@ -30,28 +26,14 @@ class MainPage(webapp2.RequestHandler): #inheritance
         self.response.write(index_template.render(index_dict))
 
 class LoginPage(webapp2.RequestHandler):
-    def checkExistingUser(self,logout_url):
-        user=users.get_current_user()
-        email_address=user.nickname()   #username
-        existing_user=SiteUser.query().filter(SiteUser.email== email_address).get() #get only pulls 1 record
-        if existing_user:
-            self.redirect("/")  #send to home
-        else:
-            self.redirect("/register")   #send to register
     def get(self):
         user=users.get_current_user()
-
-        logout_url=users.create_logout_url('/') #redirect to this link
-        if user:    #someone is already logged in to gmail
-            self.checkExistingUser(logout_url)
-        else:   #not a google user
-            login_url=users.create_login_url('/login')
-
-            login_dict={
-                "login_url": login_url
-            }
-            login_template=jinjaEnv.get_template('login.html')
-            self.response.write(login_template.render(login_dict))
+        login_url=users.create_login_url('/')
+        login_dict={
+            "login_url": login_url
+        }
+        login_template=jinjaEnv.get_template('login.html')
+        self.response.write(login_template.render(login_dict))
 
 class RegisterPage(webapp2.RequestHandler):
     def get(self):
@@ -220,6 +202,7 @@ class ResultsPage(webapp2.RequestHandler):
                     api_url = "https://api.themoviedb.org/3/search/tv?api_key=" + TMDBkey +"&query=" + q
                     TMDB_response_json = urlfetch.fetch(api_url).content
                     TMDB_response_raw = json.loads(TMDB_response_json)
+                    print(item)
                     print(TMDB_response_raw)
                     movies = {}
                     if TMDB_response_raw['total_results'] == 0:
@@ -307,48 +290,6 @@ class ResultsPage(webapp2.RequestHandler):
         checkLogIn(references)
         resultsTemplate=jinjaEnv.get_template('results.html')   #gets that html File
         self.response.write(resultsTemplate.render(references))
-        # print(recommendationList)
-        # for results in TMDB_response_raw['Similar']['Results'][0:50]:
-        #     recommendationList.append(results["Name"])
-        # titleAndPic = {}
-        # urls = []
-        # #For every item that was recommended by tastedive, we extract all the information from the OMDB database
-        # for item in recommendationList:
-        #     searchTitle = item.replace(" ", "+")
-        #     #Making the call to the OMDB Api with the correct key and then formatting with json
-        #     OMDBkey = "564669e8"
-        #     OMDBurl = "http://www.omdbapi.com/?t=" + searchTitle + "&apikey=" + OMDBkey
-        #     OMDB_response_json = urlfetch.fetch(OMDBurl).content
-        #     OMDB_response_raw = json.loads(OMDB_response_json)
-        #     posterKey = unicode("Poster")
-        #     # print(OMDB_response_raw[key])
-        #     #This function searches through the return from the OMDB database which includes names, dates, titles, genres
-        #     #And only extracts the poster image
-        #     for key in OMDB_response_raw:
-        #         if key == posterKey:
-        #             link = OMDB_response_raw[key]
-        #             urls.append(link)
-        #             titleAndPic[item] = link
-        # #Search through the OMDB database for an image for the specific item that was actually search for
-        # OMDBurl = "http://www.omdbapi.com/?t=" + q + "&apikey=" + OMDBkey
-        # # print(OMDBurl)
-        # OMDB_response_json = urlfetch.fetch(OMDBurl).content
-        # OMDB_response_raw = json.loads(OMDB_response_json)
-        # #Retrieve the image out of the returned json database
-        # posterKey = unicode("Poster")
-        # for key in OMDB_response_raw:
-        #     if key == posterKey:
-        #         searchImg = OMDB_response_raw[key]
-        # references = {
-        #     "recomendations" : recommendationList,
-        #     "link" : urls,
-        #     "movieAndPoster" : titleAndPic,
-        #     'searched' : searchTerm,
-        #     'searchImg' : searchImg
-        # }
-        # checkLogIn(references)
-        # resultsTemplate=jinjaEnv.get_template('results.html')   #gets that html File
-        # self.response.write(resultsTemplate.render(references))
 
 class VerifyPage(webapp2.RequestHandler):
     def post(self):
@@ -407,13 +348,16 @@ class VerifyPage(webapp2.RequestHandler):
             "possibleMovies" : possibleMovies,
             "type" : type
         }
+        checkLogIn(references)
         verifyTemplate=jinjaEnv.get_template('verify.html')   #gets that html File
         self.response.write(verifyTemplate.render(references))
 
-class InfoPage(webapp2.RequestHandler):
-
-    pass
-
+class MyAccountPage(webapp2.RequestHandler):
+    def get(self):
+        my_account_dict={}
+        checkLogIn(my_account_dict)
+        my_account_template=jinjaEnv.get_template('myAcct.html')
+        self.response.write(my_account_template.render(my_account_dict))
 
 
 
@@ -422,11 +366,10 @@ app=webapp2.WSGIApplication(
         ('/',MainPage), #tuple
         ('/login',LoginPage),
         ('/results', ResultsPage),
-        ('/register',RegisterPage),
         ('/movie-results',MovieResultPage),
         ('/shows-results',ShowsResultPage),
-        ('/info', InfoPage),
-        ('/verify', VerifyPage)
+        ('/verify', VerifyPage),
+        ('/my-account',MyAccountPage)
     ],
     debug=True    #parameter 1
 )

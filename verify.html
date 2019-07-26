@@ -45,15 +45,24 @@
     <!-- This makes each image a form and submits the title as a part of the form -->
     {% for item in possibleMovies %}
     <form class="resultsDisplay" action="/results" method="post">
-      <div class="resultsDisplay oneResult">
         <h4 class="subsubtitle"> {{item["title"]}} </h4>
         <input type="hidden" name="title" value="{{item["title"]}}">
         <input type="hidden" name="id" value="{{item["id"]}}">
         <input type="hidden" name="poster" value="{{item["poster"]}}">
         <input type="hidden" name="type" value={{type}}>
-          <input type="hidden" name="date" value="{{item["date"]}}">
-        <input type="image" name="{{item["title"]}}" value="" src="{{item["poster"]}}" height="300px" width="200px">
-      </div>
+        <input type="hidden" name="date" value="{{item["date"]}}">
+        <div class="wrapper">
+          <div class="image_div">
+            <p class="img_wrapper">
+              <img src="{{item["poster"]}}" name="{{item["title"]}}">
+              <span>
+                <input type="submit" value="SELECT" >
+              </span>
+            </p>
+          </div>
+        </div>
+
+        <!-- <input type="image" name="{{item["title"]}}" value="" src="{{item["poster"]}}" height="300px" width="200px"> -->
     </form>
     {% endfor %}
 
