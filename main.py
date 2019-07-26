@@ -106,12 +106,12 @@ class MovieResultPage(webapp2.RequestHandler):
             "selected_movie": movie_title
         }
         checkLogIn(movie_result_dict)
-
+        print(showtime_dict)
         movie_result_template=jinjaEnv.get_template('movie-result.html')
         self.response.write(movie_result_template.render(movie_result_dict))
     def groupByTheatre(self,showed_movie):   #return array of Theatres
-        if not showed_movie["showtimes"]:
-            return
+        if "showtimes" not in showed_movie:
+            return {}
         showtimes=showed_movie["showtimes"]
         dict={} #each theatre has many showtimes
         for showtime in showtimes:

@@ -12,18 +12,20 @@
   text-align: center;
   font-size: 20px;
 } */
-.form-group{
-  height: 100%;
-}
-#myonoffswitch, .onoffswitch, .onoffswitch-label{
-  align-items: center;
-}
-#header {
+.header {
+  font-family: 'Cinzel', serif;
   text-align: center;
   color: White;
 }
-
-.mainPage{
+.title{
+    font-size: 6em;
+    font-weight: 900;
+}
+.subtitle{
+    font-size: 2.5em;
+    font-weight: 700;
+}
+body{
   background-image: url(https://www.total-croatia-news.com/media/k2/items/cache/4481022f2c240e105013544d6a8799a0_XL.jpg);
   background-repeat: no-repeat;
   background-size: cover;
@@ -44,12 +46,13 @@
   margin: auto;
 } */
 #searchButton{
-  height: 100%;
+  ;
   /* width: 100px; */
   /* position: relative;
   font-size: 20px; */
 }
 .onoffswitch {
+  margin: auto;
     position: relative; width: 90px;
     -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
 }
@@ -59,19 +62,23 @@
 .onoffswitch-label {
     display: block; overflow: hidden; cursor: pointer;
     border: 2px solid #999999; border-radius: 20px;
+
 }
 .onoffswitch-inner {
     display: block; width: 200%; margin-left: -100%;
     transition: margin 0.3s ease-in 0s;
+
 }
 .onoffswitch-inner:before, .onoffswitch-inner:after {
     display: block; float: left; width: 50%; height: 30px; padding: 0; line-height: 30px;
     font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
     box-sizing: border-box;
+
 }
 .onoffswitch-inner:before {
     content: "TV";
     padding-left: 10px;
+
     background-color: #349AC2; color: #FFFFFF;
 }
 .onoffswitch-inner:after {
@@ -79,6 +86,7 @@
     padding-right: 10px;
     background-color: #EEEEEE; color: #999999;
     text-align: right;
+
 }
 .onoffswitch-switch {
     display: block; width: 18px; margin: 6px;
@@ -87,10 +95,13 @@
     right: 56px;
     border: 2px solid #999999; border-radius: 20px;
     transition: all 0.3s ease-in 0s;
+
 }
 .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
     margin-left: 0;
+
 }
 .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
     right: 0px;
+
 }

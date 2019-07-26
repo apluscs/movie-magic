@@ -13,3 +13,12 @@ body{
 .imgResult{
   float: left;
 }
+.subtitle{
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+
+}
+.subsubtitle{
+    font-family: 'Cinzel', serif;
+    
+}
