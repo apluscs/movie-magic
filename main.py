@@ -2,15 +2,11 @@ import webapp2
 import jinja2
 import os
 from google.appengine.api import urlfetch, users
-from google.appengine.ext import ndb
+
 import json
 import datetime
+from models import SiteUser
 
-class SiteUser(ndb.Model):
-    first_name=ndb.StringProperty()
-    email=ndb.StringProperty()
-    zip_code=ndb.StringProperty()
-    watchedMovies = ndb.StringProperty(repeated = True)
 
 
 def checkLogIn(template):
@@ -184,6 +180,7 @@ class ResultsPage(webapp2.RequestHandler):
                     api_url = "https://api.themoviedb.org/3/search/tv?api_key=" + TMDBkey +"&query=" + q
                     TMDB_response_json = urlfetch.fetch(api_url).content
                     TMDB_response_raw = json.loads(TMDB_response_json)
+                    print(item)
                     print(TMDB_response_raw)
                     movies = {}
                     if TMDB_response_raw['total_results'] == 0:

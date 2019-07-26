@@ -49,15 +49,23 @@
 
     <!-- This makes each image a form and submits the title as a part of the form -->
     {% for item in recomendations %}
-    <form class="resultsDisplay oneResult" action="/movie-results" method="post">
-      <div class="resultsDisplay">
+    <form class="resultsDisplay" action="/movie-results" method="post">
         <h4 class="subsubtitle"> {{item["title"]}} </h4>
         <input type="hidden" name="movie_title" value="{{item["title"]}}">
         <input type="hidden" name="id" value="{{item["id"]}}">
         <input type="hidden" name="movieInfo" value="{{item}}">
         <input type="hidden" name="type" value={{type}}>
-        <input type="image" name="{{item["title"]}}" value="" src="{{item["poster"]}}" height="300px" width="200px">
-      </div>
+        <div class="wrapper">
+          <div class="image_div">
+            <p class="img_wrapper">
+              <img src="{{item["poster"]}}">
+              <span>
+                <input type="submit" value="DETAILS" >
+              </span>
+            </p>
+          </div>
+        </div>
+        <!-- <input type="image" name="{{item["title"]}}" value="" src="{{item["poster"]}}" height="300px" width="200px"> -->
     </form>
     {% endfor %}
 
