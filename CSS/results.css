@@ -70,7 +70,7 @@ h1{
 {
 
  width:180px;
- position:relative;
+ position: relative;
 
 }
 .image_div .img_wrapper img
@@ -102,4 +102,13 @@ border:none;
 color:white;
 font-weight:bold;
 font-size:17px;
+}
+.imgDiv{
+  width: 200px;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+
 }
