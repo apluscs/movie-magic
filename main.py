@@ -361,8 +361,9 @@ class MyAccountPage(webapp2.RequestHandler):
 
 class UpdateMyAccount(webapp2.RequestHandler):
     def post(self):
-        print()
         print("called post UpdateMyAccount")
+        movie_info=self.request.get('movie_info')   #should be a dictionary with id, pic src, title
+        print(movie_info)
 
 app=webapp2.WSGIApplication(
     [
