@@ -20,3 +20,7 @@ toWatchBtns.forEach(toWatchBtn => {
     updateWatchLater(toWatchBtn);
   })
 });
+
+function goBack() { //goes back without actually reloading the page :D
+  window.history.go(-1);
+}

@@ -56,11 +56,11 @@
   <h1 class="subtitle">There are no similar films to this one. </h1>
   {% else %}
   <h1 class="subtitle">Similar items: </h1>
-  <div class="results">
+  <div class="results d-flex">
     <!-- This makes each image a form and submits the title as a part of the form -->
     {% for item in recomendations:  %}
       {% set i = loop.index %}
-    <form class="resultsDisplay" action="/movie-results" method="post">
+    <form class="resultsDisplay d-flex" action="/movie-results" method="post">
       <div class="imgDiv">
         <h4 class="subsubtitle"> {{item["title"]}} </h4>
       </div>
@@ -87,7 +87,12 @@
     {% endfor %}
   </div>
   {% endif %}
-  <br><br><br>
+  <div class="d-flex justify-content-center">
+    <button onclick="goBack()" class="btn btn-light">Did you mean something else?</button>
+  </div>
+
+
+  <footer style="height: 80px"></footer>
   <script type="text/javascript" src="scripts/results.js">  </script>
 
 </body>
