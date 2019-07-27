@@ -363,7 +363,12 @@ class UpdateMyAccount(webapp2.RequestHandler):
     def post(self):
         print("called post UpdateMyAccount")
         movie_info=self.request.get('movie_info')   #should be a dictionary with id, pic src, title
-        print(movie_info)
+        user=users.get_current_user()
+        email_address=user.nickname()
+        existing_user=SiteUser.query().filter(SiteUser.email==email_address).get()
+        if not existing_user:
+            existing_user = SiteUser(email_address) #make them a new account on datastore when first movie is selected
+        print(existing_user)
 
 app=webapp2.WSGIApplication(
     [
