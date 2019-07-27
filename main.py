@@ -72,7 +72,7 @@ class MovieResultPage(webapp2.RequestHandler):
         radius=self.request.get('mile_options') #minimum GraceNote allows is 5 mi
         date=datetime.datetime.now().strftime("%Y-%m-%d")
 
-        api_url="http://data.tmsapi.com/v1.1/movies/showings?startDate=%s&zip=%s&api_key=f5ty9m8fjg5hbwby658ccc75&radius=%s" % (date, zip_code,radius)
+        api_url="http://data.tmsapi.com/v1.1/movies/showings?startDate=%s&zip=%s&api_key=ymxarzzqsqx34rwnt29nswhn&radius=%s" % (date, zip_code,radius)
         print(api_url)
         gracenote_response_json = urlfetch.fetch(api_url).content
         gracenote_response_raw = json.loads(gracenote_response_json)
@@ -250,8 +250,8 @@ class ResultsPage(webapp2.RequestHandler):
                     TMDB_response_json = urlfetch.fetch(api_url).content
                     TMDB_response_raw = json.loads(TMDB_response_json)
                     movies = {}
-                    # if TMDB_response_raw['total_results'] == 0:
-                    #     continue
+                    if TMDB_response_raw['total_results'] == 0:
+                        continue
                     movies["title"] = TMDB_response_raw["results"][0]['title']
                     movies["id"] = TMDB_response_raw["results"][0]['id']
                     movies["poster"] = "http://image.tmdb.org/t/p/w185" + TMDB_response_raw["results"][0]['poster_path']
@@ -358,7 +358,10 @@ class MyAccountPage(webapp2.RequestHandler):
         my_account_template=jinjaEnv.get_template('myAcct.html')
         self.response.write(my_account_template.render(my_account_dict))
 
-
+class UpdateMyAccount(webapp2.RequestHandler):
+    def post(self):
+        print()
+        print("called post UpdateMyAccount")
 
 app=webapp2.WSGIApplication(
     [
@@ -368,7 +371,8 @@ app=webapp2.WSGIApplication(
         ('/movie-results',MovieResultPage),
         ('/shows-results',ShowsResultPage),
         ('/verify', VerifyPage),
-        ('/my-account',MyAccountPage)
+        ('/my-account',MyAccountPage),
+        ('/updateMyAccount',UpdateMyAccount)
     ],
     debug=True    #parameter 1
 )

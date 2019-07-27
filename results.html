@@ -8,6 +8,13 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link href="https://fonts.googleapis.com/css?family=Cinzel:400,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="CSS/getLocation.css">
+  <style type="text/javascript">
+  .btn-outline-success{
+    position: relative;
+    bottom: 50px;
+    }
+  </style>
+
 </head>
 
 <body>
@@ -59,10 +66,13 @@
           <div class="image_div">
             <p class="img_wrapper">
               <img src="{{item["poster"]}}">
-              <span>
+              <!-- <button type="submit" method="post" formaction="/updateMyAccount"class="toWatchBtn btn btn-outline-success">To watch</button> -->
+              <button type="button" class="toWatchBtn btn btn-outline-success">To watch</button>
+              <button type="submit" class="btn btn-outline-info">Details</button>
+              <!-- <span>
                 <input type="submit" value="DETAILS" >
-              </span>
-            </p>
+</span> -->
+           </p>
           </div>
         </div>
         <!-- <input type="image" name="{{item["title"]}}" value="" src="{{item["poster"]}}" height="300px" width="200px"> -->
@@ -70,6 +80,8 @@
     {% endfor %}
 
   </div>
+  <script type="text/javascript" src="scripts/results.js">  </script>
+
 </body>
 
 </html>
