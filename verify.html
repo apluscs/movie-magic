@@ -25,13 +25,13 @@
         </li>
       </ul>
       <nav class="navbar navbar-light bg-light">
-        <input type="checkbox" checked data-toggle="toggle">
         <form action="/verify" method='post' class="form-inline" autocomplete="off">
           <input name="searchBar" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
           <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
       </nav>
       <ul class="nav navbar-nav navbar-right">
+        <a {{hideLogOut}} class="nav-link" href='/my-account' role="button">My Account &nbsp</a>
         <li>
           <a {{hideLogIn}} class="btn btn-light" href='/login' role="button">Login</a>
         </li>

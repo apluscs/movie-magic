@@ -1,14 +1,17 @@
 
 from google.appengine.ext import ndb
-class SiteUser(ndb.Model):
-    # first_name=ndb.StringProperty()
-    email=ndb.StringProperty()
-    toWatchList=[]
-    # zip_code=ndb.StringProperty()
-    # watchedMovies = ndb.StringProperty(repeated = True)
 
 class Movie(ndb.Model):
-    name = ndb.StringProperty(required = True)
+    title = ndb.StringProperty()
+    id=ndb.StringProperty()
+    posterURL=ndb.StringProperty()
+
+
+class SiteUser(ndb.Model):
+    email=ndb.StringProperty()
+    toWatchList=ndb.KeyProperty(Movie,repeated=True)
+    seenMovies = ndb.KeyProperty(Movie,repeated = True)
+
 
 # class Liked(ndb.Model):
 #     siteuser = ndb.KeyProperty(SiteUser)

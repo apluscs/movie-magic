@@ -36,6 +36,7 @@
       </nav>
 
       <ul class="nav navbar-nav navbar-right">
+        <a {{hideLogOut}} class="nav-link" href='/my-account' role="button">My Account &nbsp</a>
         <li>
           <a {{hideLogIn}} class="btn btn-light" href='/login' role="button">Login</a>
         </li>
@@ -63,14 +64,14 @@
       <div class="imgDiv">
         <h4 class="subsubtitle"> {{item["title"]}} </h4>
       </div>
-        <input type="hidden" id="movie_title" name="movie_title" value="{{item["title"]}}">
-        <input type="hidden" id="id" name="id" value="{{item["id"]}}">
+        <input type="hidden" id="movie_title{{i}}" name="movie_title" value="{{item["title"]}}">
+        <input type="hidden" id="id{{i}}" name="id" value="{{item["id"]}}">
         <input type="hidden" id="movieInfo{{i}}" name="movieInfo" value="{{item}}">
         <input type="hidden"  id="type" name="type" value={{type}}>
         <div class="wrapper">
           <div class="image_div">
             <p class="img_wrapper">
-              <img src="{{item["poster"]}}">
+              <img id="movie_poster{{i}}"src="{{item["poster"]}}">
               <!-- <button type="submit" method="post" formaction="/updateMyAccount"class="toWatchBtn btn btn-outline-success">To watch</button> -->
               <button {{hideLogOut}} type="button" class="toWatchBtn btn btn-outline-success" id ="{{i}}">To watch</button>
               <button type="submit" class="btn btn-outline-info">Details</button>

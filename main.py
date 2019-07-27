@@ -5,7 +5,7 @@ from google.appengine.api import urlfetch, users
 
 import json
 import datetime
-from models import SiteUser
+from models import SiteUser,Movie
 
 
 
@@ -72,7 +72,7 @@ class MovieResultPage(webapp2.RequestHandler):
         radius=self.request.get('mile_options') #minimum GraceNote allows is 5 mi
         date=datetime.datetime.now().strftime("%Y-%m-%d")
 
-        api_url="http://data.tmsapi.com/v1.1/movies/showings?startDate=%s&zip=%s&api_key=ymxarzzqsqx34rwnt29nswhn&radius=%s" % (date, zip_code,radius)
+        api_url="http://data.tmsapi.com/v1.1/movies/showings?startDate=%s&zip=%s&api_key=zqhnfqa7uwk9umu23kegjdy8&radius=%s" % (date, zip_code,radius)
         print(api_url)
         gracenote_response_json = urlfetch.fetch(api_url).content
         gracenote_response_raw = json.loads(gracenote_response_json)
@@ -355,8 +355,32 @@ class VerifyPage(webapp2.RequestHandler):
         self.response.write(verifyTemplate.render(references))
 
 class MyAccountPage(webapp2.RequestHandler):
+    def makeMovieList(self,list):
+        res=[] #will be filled with dictionaries representing Movies
+        for movie_key in list:
+            movieData=movie_key.get()
+            movie={
+                "title": movieData.title,
+                "id": movieData.id,
+                "poster": movieData.posterURL
+            }
+            res.append(movie)
+        return res
+
     def get(self):
-        my_account_dict={}
+        user=users.get_current_user()
+        email_address=user.nickname()
+        existing_user=SiteUser.query().filter(SiteUser.email==email_address).get()
+        if not existing_user:
+            self.redirect('/')
+            return
+        print(existing_user.toWatchList)
+        toWatchList=self.makeMovieList(existing_user.toWatchList)
+        seenMovies=self.makeMovieList(existing_user.seenMovies)
+        my_account_dict={
+            "toWatchList": toWatchList,
+            "seenMovies": seenMovies
+        }
         checkLogIn(my_account_dict)
         my_account_template=jinjaEnv.get_template('myAcct.html')
         self.response.write(my_account_template.render(my_account_dict))
@@ -364,15 +388,46 @@ class MyAccountPage(webapp2.RequestHandler):
 class UpdateMyAccount(webapp2.RequestHandler):
     def post(self):
         print("called post UpdateMyAccount")
-        movie_info=self.request.get('movie_info')   #should be a dictionary with id, pic src, title
         user=users.get_current_user()
         email_address=user.nickname()
         existing_user=SiteUser.query().filter(SiteUser.email==email_address).get()
         # print(email_address)
+
+        movie_title=self.request.get("movie_title")
+        movie_id=self.request.get("movie_id")
+        movie_poster=self.request.get("movie_poster")
+        movie=Movie(title=movie_title, id=movie_id,posterURL=movie_poster)
+        print(movie)
+        existing_movie=Movie.query().filter(Movie.id==movie_id).get()
+        movie_key=""
+        if not existing_movie:
+            movie_key=movie.put()
+        else:
+            movie_key=existing_movie.key
         if not existing_user:
             existing_user = SiteUser(email=email_address) #make them a new account on datastore when first movie is selected
-        print(existing_user)
-        existing_user.toWatchList.append(movie_info)
+        print(movie_key)
+        # print(existing_users)
+        existing_user.toWatchList.append(movie_key)
+        print(existing_user.toWatchList)
+        existing_user.put()
+
+class MarkSeenMovie(webapp2.RequestHandler):
+    def post(self):
+        print("called post UpdateMyAccount")
+        user=users.get_current_user()
+        email_address=user.nickname()
+        existing_user=SiteUser.query().filter(SiteUser.email==email_address).get()
+
+        movie_title=self.request.get("movie_title")
+        movie_id=self.request.get("movie_id")
+        movie_poster=self.request.get("movie_poster")
+        print(movie_title)
+        movie=Movie.query().filter(Movie.id==movie_id).get()
+        movie_key=movie.key
+        existing_user.seenMovies.append(movie_key)
+        existing_user.toWatchList.remove(movie_key)
+        print(existing_user.seenMovies)
         print(existing_user.toWatchList)
         existing_user.put()
 
@@ -385,7 +440,8 @@ app=webapp2.WSGIApplication(
         ('/shows-results',ShowsResultPage),
         ('/verify', VerifyPage),
         ('/my-account',MyAccountPage),
-        ('/updateMyAccount',UpdateMyAccount)
+        ('/updateMyAccount',UpdateMyAccount),
+        ('/markSeenMovie',MarkSeenMovie)
     ],
     debug=True    #parameter 1
 )
