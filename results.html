@@ -51,25 +51,28 @@
     <img id="srcImg" height="600px" width='400px' src='{{searchImg}}' />
   </div>
   <br><br>
+  {% if recomendations|length == 0: %}
+  <h1 class="subtitle">There are no similar films to this one. </h1>
+  {% else %}
   <h1 class="subtitle">Similar items: </h1>
   <div class="results">
-
     <!-- This makes each image a form and submits the title as a part of the form -->
-    {% for item in recomendations %}
+    {% for item in recomendations:  %}
+      {% set i = loop.index %}
     <form class="resultsDisplay" action="/movie-results" method="post">
       <div class="imgDiv">
         <h4 class="subsubtitle"> {{item["title"]}} </h4>
       </div>
         <input type="hidden" id="movie_title" name="movie_title" value="{{item["title"]}}">
         <input type="hidden" id="id" name="id" value="{{item["id"]}}">
-        <input type="hidden" id="movieInfo" name="movieInfo" value="{{item}}">
+        <input type="hidden" id="movieInfo{{i}}" name="movieInfo" value="{{item}}">
         <input type="hidden"  id="type" name="type" value={{type}}>
         <div class="wrapper">
           <div class="image_div">
             <p class="img_wrapper">
               <img src="{{item["poster"]}}">
               <!-- <button type="submit" method="post" formaction="/updateMyAccount"class="toWatchBtn btn btn-outline-success">To watch</button> -->
-              <button {{hideLogOut}} type="button" class="toWatchBtn btn btn-outline-success">To watch</button>
+              <button {{hideLogOut}} type="button" class="toWatchBtn btn btn-outline-success" id ="{{i}}">To watch</button>
               <button type="submit" class="btn btn-outline-info">Details</button>
               <!-- <span>
                 <input type="submit" value="DETAILS" >
@@ -81,8 +84,9 @@
         <!-- <input type="image" name="{{item["title"]}}" value="" src="{{item["poster"]}}" height="300px" width="200px"> -->
     </form>
     {% endfor %}
-
   </div>
+  {% endif %}
+  <br><br><br>
   <script type="text/javascript" src="scripts/results.js">  </script>
 
 </body>

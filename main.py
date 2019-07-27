@@ -248,10 +248,12 @@ class ResultsPage(webapp2.RequestHandler):
                     q = item.replace(" ", "+")
                     TMDBkey = "e2648a8f2ae94cef44c1fcfbf7a0f461"
                     api_url = "https://api.themoviedb.org/3/search/movie?api_key=" + TMDBkey +"&query=" + q
+                    # print(api_url)
                     TMDB_response_json = urlfetch.fetch(api_url).content
                     TMDB_response_raw = json.loads(TMDB_response_json)
                     movies = {}
-                    if TMDB_response_raw['total_results'] == 0:
+                    # print(TMDB_response_raw)
+                    if TMDB_response_raw['total_results']==0 or TMDB_response_raw["results"][0]['poster_path']is None:  #if no poster path, just leave this film out
                         continue
                     movies["title"] = TMDB_response_raw["results"][0]['title']
                     movies["id"] = TMDB_response_raw["results"][0]['id']
@@ -366,9 +368,13 @@ class UpdateMyAccount(webapp2.RequestHandler):
         user=users.get_current_user()
         email_address=user.nickname()
         existing_user=SiteUser.query().filter(SiteUser.email==email_address).get()
+        # print(email_address)
         if not existing_user:
-            existing_user = SiteUser(email_address) #make them a new account on datastore when first movie is selected
+            existing_user = SiteUser(email=email_address) #make them a new account on datastore when first movie is selected
         print(existing_user)
+        existing_user.toWatchList.append(movie_info)
+        print(existing_user.toWatchList)
+        existing_user.put()
 
 app=webapp2.WSGIApplication(
     [

@@ -3,7 +3,7 @@ from google.appengine.ext import ndb
 class SiteUser(ndb.Model):
     # first_name=ndb.StringProperty()
     email=ndb.StringProperty()
-    toWatch=[]
+    toWatchList=[]
     # zip_code=ndb.StringProperty()
     # watchedMovies = ndb.StringProperty(repeated = True)
 
