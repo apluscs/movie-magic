@@ -74,8 +74,8 @@
               <div class="wrapper">
                 <h4 class="subsubtitle"> {{item["title"]}} </h4>
                 <div class="image_div ">
-                  <div class="img_wrapper">
-                    <img id="movie_poster{{i}}"src="{{item["poster"]}}">
+                  <div class="img_wrapper d-flex flex-column ">
+                    <img class="poster" id="movie_poster{{i}}"src="{{item["poster"]}}">
                  </div>
                 </div>
                 <div class="d-flex flex-column justify-content-center">
@@ -87,6 +87,7 @@
 
               <!-- <input type="image" name="{{item["title"]}}" value="" src="{{item["poster"]}}" height="300px" width="200px"> -->
           </form>
+
         {% endfor %}
       </div>
     </div>

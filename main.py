@@ -209,6 +209,7 @@ class ResultsPage(webapp2.RequestHandler):
                     TMDB_response_json = urlfetch.fetch(api_url).content
                     TMDB_response_raw = json.loads(TMDB_response_json)
                     movies = {}
+                    print(api_url)
                     if TMDB_response_raw['total_results']==0 or TMDB_response_raw["results"][0]['poster_path']is None:  #if no poster path, just leave this film out
                         continue
                     movies["title"] = TMDB_response_raw['results'][0]['name']
