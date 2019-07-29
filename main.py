@@ -401,7 +401,9 @@ class UpdateMyAccount(webapp2.RequestHandler):
         movie_title=self.request.get("movie_title")
         movie_id=self.request.get("movie_id")
         movie_poster=self.request.get("movie_poster")
-        movie=Movie(title=movie_title, id=movie_id,posterURL=movie_poster)
+        type=self.request.get("type")
+        # print("888888"+type)
+        movie=Movie(title=movie_title, id=movie_id,posterURL=movie_poster,type=type)
         # print(movie)
         existing_movie=Movie.query().filter(Movie.id==movie_id).get()
         movie_key=""

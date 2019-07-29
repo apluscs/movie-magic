@@ -5,6 +5,7 @@ class Movie(ndb.Model):
     title = ndb.StringProperty()
     id=ndb.StringProperty()
     posterURL=ndb.StringProperty()
+    type=ndb.StringProperty()
 
 
 class SiteUser(ndb.Model):
