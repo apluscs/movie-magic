@@ -9,7 +9,6 @@ const updateWatchLater = (markSeenBtn) => {
   markSeenBtn.remove();
 
 
-
   var xhr = new XMLHttpRequest(); //python and datastore stuff
 
   console.log(ind);

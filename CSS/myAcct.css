@@ -10,10 +10,8 @@ body{
   background-size: cover;
 }
 
-.imgResult{
-  float: left;
-  padding: 15px;
-  align-content: top;
+.class{
+  align-self: center;
 }
 .info{
   color: white;
@@ -45,9 +43,8 @@ div.info{
 .resultsDisplay{
   margin-bottom: 30px;
 }
-#title{
-  font-family: 'Cinzel', serif;
-  font-weight: 550;
+.img_wrapper{
+  align-items: center;
 }
 .col{
   padding: 20px;

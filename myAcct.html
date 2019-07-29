@@ -21,12 +21,11 @@
           </li>
         </ul>
         <nav class="navbar navbar-light bg-light bar">
-          <form action = "/verify" method = 'post' class="form-inline">
+          <form action = "/verify" method = 'post' class="form-inline" autocomplete="off">
             <input name="searchBar" class="form-control mr-sm-2" type="search" placeholder="Search for another movie" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
           </form>
         </nav>
-
         <ul class="nav navbar-nav navbar-right">
           <li>
             <a {{hideLogIn}} class="btn btn-light" href='/login' role="button">Login</a>
@@ -43,18 +42,18 @@
         <h1 class="subtitle">Movies You've Watched</h1>
         {% for item in seenMovies:  %}
           {% set i = loop.index %}
-        <form class="resultsDisplay d-flex justify-content-center" id="mov{i}}" action="/movie-results" method="post">
+        <form class="resultsDisplay d-flex justify-content-center" id="mov{{i}}" action="/movie-results" method="post">
             <input type="hidden" id="movie_title{{i}}" name="movie_title" value="{{item["title"]}}">
             <input type="hidden" id="id{{i}}" name="id" value="{{item["id"]}}">
             <input type="hidden" id="movieInfo{{i}}" name="movieInfo" value="{{item}}">
             <div class="wrapper">
               <h4 class="subsubtitle"> {{item["title"]}} </h4>
               <div class="image_div ">
-                <div class="img_wrapper">
+                <div class="img_wrapper d-flex justify-content-center">
                   <img id="movie_poster{{i}}"src="{{item["poster"]}}">
                </div>
               </div>
-              <div class="d-flex flex-column justify-content-center">
+              <div class="d-flex justify-content-center details-btn ">
                 <button type="submit" class="btn btn-outline-info">Details</button>
               </div>
             </div>
@@ -67,7 +66,7 @@
         <h1 class="subtitle">To Watch </h1>
         {% for item in toWatchList:  %}
           {% set i = loop.index+seenMovies|length  %}
-          <form class="resultsDisplay d-flex justify-content-center" id="mov{i}}" action="/movie-results" method="post">
+          <form class="resultsDisplay d-flex justify-content-center" id="mov{{i}}" action="/movie-results" method="post">
               <input type="hidden" id="movie_title{{i}}" name="movie_title" value="{{item["title"]}}">
               <input type="hidden" id="id{{i}}" name="id" value="{{item["id"]}}">
               <input type="hidden" id="movieInfo{{i}}" name="movieInfo" value="{{item}}">

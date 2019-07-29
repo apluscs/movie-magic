@@ -198,7 +198,7 @@ class ResultsPage(webapp2.RequestHandler):
                 tastedive_response_json = urlfetch.fetch(api_url).content
                 tastedive_response_raw = json.loads(tastedive_response_json)
                 tasteDiveRecommendationList = []
-                for results in tastedive_response_raw['Similar']['Results'][0:50]:
+                for results in tastedive_response_raw['Similar']['Results'][0:25]:
                     tasteDiveRecommendationList.append(results["Name"])
                 recommendationList = []
                 # print(tasteDiveRecommendationList)
