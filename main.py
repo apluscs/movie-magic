@@ -191,7 +191,7 @@ class ResultsPage(webapp2.RequestHandler):
                 tastedive_response_json = urlfetch.fetch(api_url).content
                 tastedive_response_raw = json.loads(tastedive_response_json)
                 tasteDiveRecommendationList = []
-                for results in tastedive_response_raw['Similar']['Results'][0:50]:
+                for results in tastedive_response_raw['Similar']['Results'][0:25]:
                     tasteDiveRecommendationList.append(results["Name"])
                 recommendationList = []
                 # print(tasteDiveRecommendationList)
@@ -202,7 +202,8 @@ class ResultsPage(webapp2.RequestHandler):
                     TMDB_response_json = urlfetch.fetch(api_url).content
                     TMDB_response_raw = json.loads(TMDB_response_json)
                     movies = {}
-                    if TMDB_response_raw['total_results']==0 or TMDB_response_raw["results"][0]['poster_path']is None:  #if no poster path, just leave this film out
+                    print(api_url)
+                    if TMDB_response_raw['total_results']== 0 or TMDB_response_raw["results"][0]['poster_path']is None:  #if no poster path, just leave this film out
                         continue
                     movies["title"] = TMDB_response_raw['results'][0]['name']
                     movies["id"] = TMDB_response_raw["results"][0]['id']
