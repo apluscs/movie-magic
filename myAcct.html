@@ -2,9 +2,10 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title></title>
+    <title>Your Account</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="CSS/getLocation.css">
+    <link href="https://fonts.googleapis.com/css?family=Cinzel:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="CSS/myAcct.css">
   </head>
   <body>
     <link rel="stylesheet" href="getLocation.css">
@@ -38,27 +39,23 @@
     </nav>
 
     <div class="d-flex flex-row">
-      <div class="d-flex flex-column col-lg-6 p-2 justify-content-center" id="markSeenDiv">
-        <h1>Movies you've watched</h1>
+      <div class="d-flex flex-column col-lg-6 col" id="markSeenDiv">
+        <h1 class="subtitle">Movies You've Watched</h1>
         {% for item in seenMovies:  %}
           {% set i = loop.index %}
-        <form class="resultsDisplay" id="mov{i}}" action="/movie-results" method="post">
-          <div class="imgDiv">
-            <h4 class="subsubtitle"> {{item["title"]}} </h4>
-          </div>
+        <form class="resultsDisplay d-flex justify-content-center" id="mov{i}}" action="/movie-results" method="post">
             <input type="hidden" id="movie_title{{i}}" name="movie_title" value="{{item["title"]}}">
             <input type="hidden" id="id{{i}}" name="id" value="{{item["id"]}}">
             <input type="hidden" id="movieInfo{{i}}" name="movieInfo" value="{{item}}">
             <div class="wrapper">
-              <div class="image_div">
-                <p class="img_wrapper">
+              <h4 class="subsubtitle"> {{item["title"]}} </h4>
+              <div class="image_div ">
+                <div class="img_wrapper">
                   <img id="movie_poster{{i}}"src="{{item["poster"]}}">
-                  <!-- <button type="submit" method="post" formaction="/updateMyAccount"class="toWatchBtn btn btn-outline-success">To watch</button> -->
-                  <button type="submit" class="btn btn-outline-info">Details</button>
-                  <!-- <span>
-                    <input type="submit" value="DETAILS" >
-    </span> -->
-               </p>
+               </div>
+              </div>
+              <div class="d-flex flex-column justify-content-center">
+                <button type="submit" class="btn btn-outline-info">Details</button>
               </div>
             </div>
 
@@ -66,33 +63,30 @@
         </form>
         {% endfor %}
       </div>
-      <div class="d-flex flex-column col-lg-6 p-2">
-        <h1 class="d-flex">To watch: </h1>
+      <div class="d-flex flex-column col-lg-6 col">
+        <h1 class="subtitle">To Watch </h1>
         {% for item in toWatchList:  %}
           {% set i = loop.index+seenMovies|length  %}
-        <form class="resultsDisplay" id="mov{{i}}" action="/movie-results" method="post">
-          <div class="imgDiv">
-            <h4 class="subsubtitle"> {{item["title"]}} </h4>
-          </div>
-            <input type="hidden" id="movie_title{{i}}" name="movie_title" value="{{item["title"]}}">
-            <input type="hidden" id="id{{i}}" name="id" value="{{item["id"]}}">
-            <input type="hidden" id="movieInfo{{i}}" name="movieInfo" value="{{item}}">
-            <div class="wrapper">
-              <div class="image_div">
-                <p class="img_wrapper">
-                  <img id="movie_poster{{i}}"src="{{item["poster"]}}">
-                  <!-- <button type="submit" method="post" formaction="/updateMyAccount"class="toWatchBtn btn btn-outline-success">To watch</button> -->
+          <form class="resultsDisplay d-flex justify-content-center" id="mov{i}}" action="/movie-results" method="post">
+              <input type="hidden" id="movie_title{{i}}" name="movie_title" value="{{item["title"]}}">
+              <input type="hidden" id="id{{i}}" name="id" value="{{item["id"]}}">
+              <input type="hidden" id="movieInfo{{i}}" name="movieInfo" value="{{item}}">
+              <div class="wrapper">
+                <h4 class="subsubtitle"> {{item["title"]}} </h4>
+                <div class="image_div ">
+                  <div class="img_wrapper">
+                    <img id="movie_poster{{i}}"src="{{item["poster"]}}">
+                 </div>
+                </div>
+                <div class="d-flex flex-column justify-content-center">
                   <button type="button" class="markSeen btn btn-outline-success" id ="{{i}}">Mark as seen</button>
-                  <button type="submit" class="btn btn-outline-info">Details</button>
-                  <!-- <span>
-                    <input type="submit" value="DETAILS" >
-    </span> -->
-               </p>
-              </div>
-            </div>
 
-            <!-- <input type="image" name="{{item["title"]}}" value="" src="{{item["poster"]}}" height="300px" width="200px"> -->
-        </form>
+                  <button type="submit" class="btn btn-outline-info">Details</button>
+                </div>
+              </div>
+
+              <!-- <input type="image" name="{{item["title"]}}" value="" src="{{item["poster"]}}" height="300px" width="200px"> -->
+          </form>
         {% endfor %}
       </div>
     </div>

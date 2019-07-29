@@ -27,7 +27,6 @@ class MainPage(webapp2.RequestHandler): #inheritance
 
 class LoginPage(webapp2.RequestHandler):
     def get(self):
-        user=users.get_current_user()
         login_url=users.create_login_url('/')
         login_dict={
             "login_url": login_url

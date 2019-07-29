@@ -17,11 +17,9 @@ body{
 }
 .info{
   color: white;
-  font-size: 20px;
-  background: #696969;
+  font-size: 20px
 }
 div.info{
-  height: auto;
   height: 500px;
   margin-left: 20%;
   margin-right: 20%;
@@ -29,9 +27,28 @@ div.info{
 .subtitle{
     font-family: 'Cinzel', serif;
     font-weight: 700;
-
+    color: white;
+    text-align: center;
+    margin-top: 30px;
 }
 .subsubtitle{
     font-family: 'Cinzel', serif;
-
+    color: white;
+    text-align: center;
+    margin-bottom: 0px;
+    text-transform: uppercase;
+}
+.tv{
+  font-family: 'Cinzel', serif;
+  font-weight: 400;
+}
+.resultsDisplay{
+  margin-bottom: 30px;
+}
+#title{
+  font-family: 'Cinzel', serif;
+  font-weight: 550;
+}
+.col{
+  padding: 20px;
 }
