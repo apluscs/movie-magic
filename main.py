@@ -202,10 +202,8 @@ class ResultsPage(webapp2.RequestHandler):
                     api_url = "https://api.themoviedb.org/3/search/tv?api_key=" + TMDBkey +"&query=" + q
                     TMDB_response_json = urlfetch.fetch(api_url).content
                     TMDB_response_raw = json.loads(TMDB_response_json)
-                    # print(item)
-                    # print(TMDB_response_raw)
                     movies = {}
-                    if TMDB_response_raw['total_results'] == 0:
+                    if TMDB_response_raw['total_results']==0 or TMDB_response_raw["results"][0]['poster_path']is None:  #if no poster path, just leave this film out
                         continue
                     movies["title"] = TMDB_response_raw['results'][0]['name']
                     movies["id"] = TMDB_response_raw["results"][0]['id']
