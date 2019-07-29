@@ -73,7 +73,7 @@ class MovieResultPage(webapp2.RequestHandler):
         date=datetime.datetime.now().strftime("%Y-%m-%d")
 
         api_url="http://data.tmsapi.com/v1.1/movies/showings?startDate=%s&zip=%s&api_key=zqhnfqa7uwk9umu23kegjdy8&radius=%s" % (date, zip_code,radius)
-        print(api_url)
+        # print(api_url)
         gracenote_response_json = urlfetch.fetch(api_url).content
         gracenote_response_raw = json.loads(gracenote_response_json)
         showed_movie=""
@@ -115,8 +115,8 @@ class MovieResultPage(webapp2.RequestHandler):
             api_url = "https://api.themoviedb.org/3/tv/" + id + "?api_key=e2648a8f2ae94cef44c1fcfbf7a0f461"
             TMDB_response_json = urlfetch.fetch(api_url).content
             TMDB_response_raw = json.loads(TMDB_response_json)
-            print('***********')
-            print(api_url)
+            # print('***********')
+            # print(api_url)
                 # user=users.get_current_user()
             genre = []
             creators = []
@@ -146,7 +146,7 @@ class MovieResultPage(webapp2.RequestHandler):
             api_url = "https://api.themoviedb.org/3/movie/" + id + "?api_key=e2648a8f2ae94cef44c1fcfbf7a0f461"
             TMDB_response_json = urlfetch.fetch(api_url).content
             TMDB_response_raw = json.loads(TMDB_response_json)
-            print(TMDB_response_raw)
+            # print(TMDB_response_raw)
             movie_title=self.request.get('movie_title') #form on getLocation.html is not sending this
             # movie_title=movie_title.replace(' ','_')
             user=users.get_current_user()
@@ -167,8 +167,8 @@ class MovieResultPage(webapp2.RequestHandler):
                 'rating' : TMDB_response_raw['vote_average']
 
             }
-        print(get_location_dict)
-        print(type)
+        # print(get_location_dict)
+        # print(type)
         checkLogIn(get_location_dict)
         get_location_template=jinjaEnv.get_template('getLocation.html')
         self.response.write(get_location_template.render(get_location_dict))
@@ -195,17 +195,15 @@ class ResultsPage(webapp2.RequestHandler):
                 for results in tastedive_response_raw['Similar']['Results'][0:50]:
                     tasteDiveRecommendationList.append(results["Name"])
                 recommendationList = []
-                print(tasteDiveRecommendationList)
+                #print(tasteDiveRecommendationList)
                 for item in tasteDiveRecommendationList:
                     q = item.replace(" ", "+")
                     TMDBkey = "e2648a8f2ae94cef44c1fcfbf7a0f461"
                     api_url = "https://api.themoviedb.org/3/search/tv?api_key=" + TMDBkey +"&query=" + q
                     TMDB_response_json = urlfetch.fetch(api_url).content
                     TMDB_response_raw = json.loads(TMDB_response_json)
-                    print(item)
-                    print(TMDB_response_raw)
                     movies = {}
-                    if TMDB_response_raw['total_results'] == 0:
+                    if TMDB_response_raw['total_results']==0 or TMDB_response_raw["results"][0]['poster_path']is None:  #if no poster path, just leave this film out
                         continue
                     movies["title"] = TMDB_response_raw['results'][0]['name']
                     movies["id"] = TMDB_response_raw["results"][0]['id']
@@ -232,7 +230,7 @@ class ResultsPage(webapp2.RequestHandler):
                     movieDict["poster"] = photoURL
                     movieDict["id"] = id
                     recommendationList.append(movieDict)
-                print("TMDB")
+                # print("TMDB")
         else:
             if (date < "2019"): #Use Tastedive for recommendations
                 q = searchTitle.replace(" ","+")
@@ -259,7 +257,7 @@ class ResultsPage(webapp2.RequestHandler):
                     movies["id"] = TMDB_response_raw["results"][0]['id']
                     movies["poster"] = "http://image.tmdb.org/t/p/w185" + TMDB_response_raw["results"][0]['poster_path']
                     recommendationList.append(movies)
-                print("tastedive")
+                # print("tastedive")
                 #Makes the searchTerm into a url compatable string
                 # q = searchTerm.replace(" ","+")
                 #Make the tastedivekey and use the URL to retrieve data from the tastedive API
@@ -281,7 +279,7 @@ class ResultsPage(webapp2.RequestHandler):
                     movieDict["poster"] = photoURL
                     movieDict["id"] = id
                     recommendationList.append(movieDict)
-                print("TMDB")
+                # print("TMDB")
         references = {
             "recomendations" : recommendationList,
             'searched' : searchTitle,
@@ -296,7 +294,7 @@ class ResultsPage(webapp2.RequestHandler):
 class VerifyPage(webapp2.RequestHandler):
     def post(self):
         switch = self.request.get("switch")
-        print(switch)
+        # print(switch)
         if switch == "TV":
             type = "TV"
             searchTerm = self.request.get("searchBar")
@@ -306,7 +304,7 @@ class VerifyPage(webapp2.RequestHandler):
             api_url = "https://api.themoviedb.org/3/search/tv?api_key=" + TMDBkey +"&query=" + q
             TMDB_response_json = urlfetch.fetch(api_url).content
             TMDB_response_raw = json.loads(TMDB_response_json)
-            print(TMDB_response_raw)
+            # print(TMDB_response_raw)
             possibleMovies = []
             for item in TMDB_response_raw["results"]:
                 if item['poster_path'] == None:
