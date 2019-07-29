@@ -20,6 +20,13 @@ def checkLogIn(template):
 
 class MainPage(webapp2.RequestHandler): #inheritance
     def get(self):
+        user=users.get_current_user()
+        if user:    #dumb but working way to put a new user in the datastore (idk how to do this from the login page)
+            email_address=user.nickname()
+            existing_user=SiteUser.query().filter(SiteUser.email==email_address).get()
+            if not existing_user:
+                existing_user = SiteUser(email=email_address)
+                existing_user.put()
         index_template=jinjaEnv.get_template('index.html')
         index_dict={}
         checkLogIn(index_dict)
@@ -401,8 +408,6 @@ class UpdateMyAccount(webapp2.RequestHandler):
             movie_key=movie.put()
         else:
             movie_key=existing_movie.key
-        if not existing_user:
-            existing_user = SiteUser(email=email_address) #make them a new account on datastore when first movie is selected
         print(movie_key)
         # print(existing_users)
         existing_user.toWatchList.append(movie_key)
