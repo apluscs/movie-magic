@@ -41,11 +41,12 @@
     </div>
   </nav>
 
+
+
   {% if type == 'TV' %}
-  <div class="info">
-    <br>
+  <div class="jumbotron">
     <img class="imgResult" height="400px" width="300px" src="{{poster}}">
-    <h1 class="tv" id="title">{{name}} | {{rating}} /10</h1>
+    <h1 class="tv" id="title"><strong>{{name}}</strong> | {{rating}}/10</h1>
     <h2 class="tv">Seasons: {{seasons}}</h2>
     <h2 class="tv">Creators: {{', '.join(creators)}}</h2>
     <h2 class="tv">Genre: {{', '.join(genre)}}</h2>
@@ -53,14 +54,15 @@
     <p class="tv">Overview: {{overview}}</p>
   </div>
   {% else %}
-  <div class="info">
+  <div class="jumbotron">
     <img class="imgResult" height="400px" width="300px" src="{{poster}}">
-    <h1 class="movie" id="title">{{name}} | {{rating}} /10</h1>
+    <h1 class="movie" id="title"><strong>{{name}}</strong> | {{rating}}/10</h1>
     <h2 class="movie">Release Date: {{release_date}}</h2>
     <h2 class="movie">Genre: {{', '.join(genre)}}</h2>
     <h2 class="movie">Runtime: {{runtime}} Mins</h2>
     <p class="movie">Overview: {{overview}}</p>
   </div>
+
   <div class="jumbotron">
     <h1 class="display-6">Please fill out this form to get showtimes for <strong>{{movie_title}}</strong>.</h1>
     <hr class="my-4">

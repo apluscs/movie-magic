@@ -15,7 +15,7 @@ body{
   padding: 15px;
   align-content: top;
 }
-.info{
+/* .info{
   color: white;
   font-size: 20px;
   background: #696969;
@@ -25,7 +25,7 @@ div.info{
   height: 500px;
   margin-left: 20%;
   margin-right: 20%;
-}
+} */
 .subtitle{
     font-family: 'Cinzel', serif;
     font-weight: 700;
