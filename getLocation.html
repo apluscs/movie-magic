@@ -44,7 +44,7 @@
 
 
   {% if type == 'TV' %}
-  <div class="jumbotron">
+  <div class="jumbotron top">
     <img class="imgResult" height="400px" width="300px" src="{{poster}}">
     <h1 class="tv" id="title"><strong>{{name}}</strong> | {{rating}}/10</h1>
     <h2 class="tv">Seasons: {{seasons}}</h2>
@@ -54,7 +54,7 @@
     <p class="tv">Overview: {{overview}}</p>
   </div>
   {% else %}
-  <div class="jumbotron">
+  <div class="jumbotron top">
     <img class="imgResult" height="400px" width="300px" src="{{poster}}">
     <h1 class="movie" id="title"><strong>{{name}}</strong> | {{rating}}/10</h1>
     <h2 class="movie">Release Date: {{release_date}}</h2>
