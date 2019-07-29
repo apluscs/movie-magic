@@ -17,9 +17,11 @@ body{
 }
 .info{
   color: white;
-  font-size: 20px
+  font-size: 20px;
+  background: #696969;
 }
 div.info{
+  height: auto;
   height: 500px;
   margin-left: 20%;
   margin-right: 20%;
