@@ -201,7 +201,7 @@ class ResultsPage(webapp2.RequestHandler):
                 for results in tastedive_response_raw['Similar']['Results'][0:50]:
                     tasteDiveRecommendationList.append(results["Name"])
                 recommendationList = []
-                #print(tasteDiveRecommendationList)
+                # print(tasteDiveRecommendationList)
                 for item in tasteDiveRecommendationList:
                     q = item.replace(" ", "+")
                     TMDBkey = "e2648a8f2ae94cef44c1fcfbf7a0f461"
@@ -378,7 +378,7 @@ class MyAccountPage(webapp2.RequestHandler):
         if not existing_user:
             self.redirect('/')
             return
-        print(existing_user.toWatchList)
+        # print(existing_user.toWatchList)
         toWatchList=self.makeMovieList(existing_user.toWatchList)
         seenMovies=self.makeMovieList(existing_user.seenMovies)
         my_account_dict={
@@ -391,7 +391,7 @@ class MyAccountPage(webapp2.RequestHandler):
 
 class UpdateMyAccount(webapp2.RequestHandler):
     def post(self):
-        print("called post UpdateMyAccount")
+        # print("called post UpdateMyAccount")
         user=users.get_current_user()
         email_address=user.nickname()
         existing_user=SiteUser.query().filter(SiteUser.email==email_address).get()
@@ -401,7 +401,7 @@ class UpdateMyAccount(webapp2.RequestHandler):
         movie_id=self.request.get("movie_id")
         movie_poster=self.request.get("movie_poster")
         movie=Movie(title=movie_title, id=movie_id,posterURL=movie_poster)
-        print(movie)
+        # print(movie)
         existing_movie=Movie.query().filter(Movie.id==movie_id).get()
         movie_key=""
         if not existing_movie:
@@ -411,12 +411,12 @@ class UpdateMyAccount(webapp2.RequestHandler):
         print(movie_key)
         # print(existing_users)
         existing_user.toWatchList.append(movie_key)
-        print(existing_user.toWatchList)
+        # print(existing_user.toWatchList)
         existing_user.put()
 
 class MarkSeenMovie(webapp2.RequestHandler):
     def post(self):
-        print("called post UpdateMyAccount")
+        # print("called post UpdateMyAccount")
         user=users.get_current_user()
         email_address=user.nickname()
         existing_user=SiteUser.query().filter(SiteUser.email==email_address).get()
@@ -424,13 +424,13 @@ class MarkSeenMovie(webapp2.RequestHandler):
         movie_title=self.request.get("movie_title")
         movie_id=self.request.get("movie_id")
         movie_poster=self.request.get("movie_poster")
-        print(movie_title)
+        # print(movie_title)
         movie=Movie.query().filter(Movie.id==movie_id).get()
         movie_key=movie.key
         existing_user.seenMovies.append(movie_key)
         existing_user.toWatchList.remove(movie_key)
-        print(existing_user.seenMovies)
-        print(existing_user.toWatchList)
+        # print(existing_user.seenMovies)
+        # print(existing_user.toWatchList)
         existing_user.put()
 
 app=webapp2.WSGIApplication(
