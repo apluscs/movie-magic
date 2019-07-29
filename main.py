@@ -78,7 +78,7 @@ class MovieResultPage(webapp2.RequestHandler):
         radius=self.request.get('mile_options') #minimum GraceNote allows is 5 mi
         date=datetime.datetime.now().strftime("%Y-%m-%d")
 
-        api_url="http://data.tmsapi.com/v1.1/movies/showings?startDate=%s&zip=%s&api_key=zqhnfqa7uwk9umu23kegjdy8&radius=%s" % (date, zip_code,radius)
+        api_url="http://data.tmsapi.com/v1.1/movies/showings?startDate=%s&zip=%s&api_key=h67cmw3tean6hyyeh58zhf7r&radius=%s" % (date, zip_code,radius)
         # print(api_url)
         gracenote_response_json = urlfetch.fetch(api_url).content
         gracenote_response_raw = json.loads(gracenote_response_json)
@@ -89,6 +89,7 @@ class MovieResultPage(webapp2.RequestHandler):
                 showed_movie=movie
                 break   #showed_movies should contain only 0 or 1 movies, but just in case it finds 2
         showtime_dict=self.groupByTheatre(showed_movie)
+        print(showtime_dict)
         movie_result_dict={
             "showtime_dict":showtime_dict,
             "selected_movie": movie_title
