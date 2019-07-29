@@ -410,6 +410,8 @@ class UpdateMyAccount(webapp2.RequestHandler):
         else:
             movie_key=existing_movie.key
         print(movie_key)
+        if movie_key in existing_user.toWatchList or movie_key in existing_user.seenMovies:
+            return
         # print(existing_users)
         existing_user.toWatchList.append(movie_key)
         # print(existing_user.toWatchList)
